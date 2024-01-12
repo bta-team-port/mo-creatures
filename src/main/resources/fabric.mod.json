@@ -1,15 +1,17 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "creatures",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This mod aims to help new BTA modders.",
+  "name": "Mo Creatures",
+  "description": "A port and remake of the classic Mo Creatures.",
   "authors": [
-    "Turnip Labs"
+		"DrZhark (original mod)",
+    "Team Port"
   ],
   "contact": {
     "homepage": "",
+		"issues": "",
     "sources": ""
   },
 
@@ -18,20 +20,20 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-			"turniplabs.examplemod.ExampleMod"
+			"teamport.creatures.MoCreatures"
     ],
 		"beforeGameStart": [
-			"turniplabs.examplemod.ExampleMod"
+			"teamport.creatures.MoCreatures"
 		],
 		"afterGameStart": [
-			"turniplabs.examplemod.ExampleMod"
+			"teamport.creatures.MoCreatures"
 		],
 		"recipesReady": [
-			"turniplabs.examplemod.ExampleMod"
+			"teamport.creatures.MoCreatures"
 		]
 	},
   "mixins": [
-      "examplemod.mixins.json"
+		"creatures.mixins.json"
   ],
 
   "depends": {
