@@ -1,5 +1,6 @@
 package teamport.creatures.entity;
 
+import com.mojang.nbt.CompoundTag;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.entity.EntityItem;
 import net.minecraft.core.entity.animal.EntityChicken;
@@ -13,6 +14,9 @@ import net.minecraft.core.world.World;
 import java.util.List;
 
 public class EntityBoar extends EntityPig {
+	boolean angry;
+	int angerCounter;
+
 	public EntityBoar(World world) {
 		super(world);
 		setSize(0.9F, 0.9F);
@@ -28,6 +32,31 @@ public class EntityBoar extends EntityPig {
 	public String getDefaultEntityTexture() {
 		return "/assets/creatures/entity/boar/0.png";
 	}
+
+	@Override
+	public void tick() {
+		super.tick();
+		if (angerCounter > 0) {
+			--angerCounter;
+			angry = true;
+		} else {
+			angry = false;
+		}
+	}
+
+	@Override
+	public boolean hurt(Entity attacker, int damage, DamageType type) {
+		if (attacker instanceof EntityPlayer) {
+			angerCounter = 400;
+		}
+		return super.hurt(attacker, damage, type);
+	}
+
+	@Override
+	protected Entity findPlayerToAttack() {
+		return angry ? world.getClosestPlayerToEntity(this, 16.0D) : null;
+	}
+
 
 	@Override
 	protected void attackEntity(Entity entity, float distance) {
@@ -60,5 +89,25 @@ public class EntityBoar extends EntityPig {
 			if (!nearbyPlayers.isEmpty())
 				this.setTarget(nearbyPlayers.get(this.world.rand.nextInt(nearbyPlayers.size())));
 		}
+	}
+
+	@Override
+	public void playLivingSound() {
+		world.playSoundAtEntity(this,
+			getLivingSound(),
+			getSoundVolume(),
+			(this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 0.6F);
+	}
+
+	@Override
+	public void addAdditionalSaveData(CompoundTag tag) {
+		super.addAdditionalSaveData(tag);
+		tag.putInt("Anger", this.angerCounter);
+	}
+
+	@Override
+	public void readAdditionalSaveData(CompoundTag tag) {
+		super.readAdditionalSaveData(tag);
+		this.angerCounter = tag.getInteger("Anger");
 	}
 }

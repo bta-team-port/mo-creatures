@@ -1,6 +1,7 @@
 package teamport.creatures.entity;
 
 import teamport.creatures.entity.render.BoarRenderer;
+import teamport.creatures.entity.render.BunnyRenderer;
 import teamport.creatures.entity.render.FoxRenderer;
 import turniplabs.halplibe.helper.EntityHelper;
 
@@ -16,5 +17,9 @@ public class MCEntities {
 		// THE HOG
 		EntityHelper.Core.createEntity(EntityBoar.class, 257, "boar");
 		EntityHelper.Client.assignEntityRenderer(EntityBoar.class, new BoarRenderer());
+
+		// Bunnies
+		EntityHelper.Core.createEntity(EntityBunny.class, 258, "bunny");
+		EntityHelper.Client.assignEntityRenderer(EntityBunny.class, new BunnyRenderer());
 	}
 }
