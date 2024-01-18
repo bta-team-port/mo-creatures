@@ -7,9 +7,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import teamport.creatures.entity.EntityBoar;
-import teamport.creatures.entity.EntityFox;
-import teamport.creatures.entity.EntityFoxArctic;
+import teamport.creatures.entity.*;
 
 import java.util.List;
 
@@ -22,6 +20,8 @@ public abstract class BiomeMixin {
 	private void creatures_addMobs(CallbackInfo ci) {
 		spawnableCreatureList.add(new SpawnListEntry(EntityFox.class, 10));
 		spawnableCreatureList.add(new SpawnListEntry(EntityFoxArctic.class, 10));
-		spawnableCreatureList.add(new SpawnListEntry(EntityBoar.class, 51));
+		spawnableCreatureList.add(new SpawnListEntry(EntityBoar.class, 50));
+		spawnableCreatureList.add(new SpawnListEntry(EntityBunny.class, 40));
+		spawnableCreatureList.add(new SpawnListEntry(EntityBird.class, 20));
 	}
 }
