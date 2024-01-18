@@ -20,5 +20,28 @@ public class MCSounds {
 		SoundHelper.Client.addSound(MOD_ID, "rabbithurt2.ogg");
 		SoundHelper.Client.addSound(MOD_ID, "rabbitland.ogg");
 		SoundHelper.Client.addSound(MOD_ID, "rabbitlift.ogg");
+
+		// Birds (oh boy)
+		SoundHelper.Client.addSound(MOD_ID, "birdblack1.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdblack2.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdblack3.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdblue1.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdblue2.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdblue3.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdblue4.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdgreen1.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdgreen2.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdgreen3.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdred1.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdred2.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdred3.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdred4.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdred5.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdwhite1.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdyellow1.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdyellow2.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdyellow3.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdyellow4.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "birdyellow5.ogg");
 	}
 }

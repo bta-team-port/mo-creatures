@@ -1,5 +1,6 @@
 package teamport.creatures.entity;
 
+import teamport.creatures.entity.render.BirdRenderer;
 import teamport.creatures.entity.render.BoarRenderer;
 import teamport.creatures.entity.render.BunnyRenderer;
 import teamport.creatures.entity.render.FoxRenderer;
@@ -21,5 +22,9 @@ public class MCEntities {
 		// Bunnies
 		EntityHelper.Core.createEntity(EntityBunny.class, 258, "bunny");
 		EntityHelper.Client.assignEntityRenderer(EntityBunny.class, new BunnyRenderer());
+
+		// Birds
+		EntityHelper.Core.createEntity(EntityBird.class, 259, "bird");
+		EntityHelper.Client.assignEntityRenderer(EntityBird.class, new BirdRenderer());
 	}
 }
