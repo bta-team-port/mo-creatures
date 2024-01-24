@@ -27,7 +27,6 @@ public class EntityFoxArctic extends EntityFox {
 	@Override
 	public boolean getCanSpawnHere() {
 		Biome biome = world.getBlockBiome((int) x, (int) y, (int) z);
-		return (biome == Biomes.OVERWORLD_TUNDRA || biome == Biomes.OVERWORLD_TAIGA)
-			&& super.getCanSpawnHere();
+		return (biome == Biomes.OVERWORLD_TUNDRA || biome == Biomes.OVERWORLD_TAIGA) && super.getCanSpawnHere();
 	}
 }

@@ -1,7 +1,6 @@
 package teamport.creatures.entity.render;
 
 import net.minecraft.client.render.entity.LivingRenderer;
-import net.minecraft.client.render.model.ModelBase;
 import teamport.creatures.entity.EntityBoar;
 import useless.dragonfly.helper.ModelHelper;
 

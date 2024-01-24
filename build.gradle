@@ -11,6 +11,7 @@ loom {
 	gluedMinecraftJar()
 	noIntermediateMappings()
 	customMinecraftManifest.set("https://github.com/Turnip-Labs/bta-manifest-repo/releases/download/v${project.bta_version}/${project.bta_version}.json")
+	accessWidenerPath = file("src/main/resources/creatures.accesswidener")
 }
 
 repositories {

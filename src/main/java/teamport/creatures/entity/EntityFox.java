@@ -35,12 +35,7 @@ public class EntityFox extends EntityAnimal {
 	@Override
 	public void tick() {
 		super.tick();
-		if (angerCounter > 0) {
-			--angerCounter;
-			angry = true;
-		} else {
-			angry = false;
-		}
+        angry = angerCounter-- > 0;
 	}
 
 	@Override

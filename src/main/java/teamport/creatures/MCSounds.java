@@ -43,5 +43,14 @@ public class MCSounds {
 		SoundHelper.Client.addSound(MOD_ID, "birdyellow3.ogg");
 		SoundHelper.Client.addSound(MOD_ID, "birdyellow4.ogg");
 		SoundHelper.Client.addSound(MOD_ID, "birdyellow5.ogg");
+
+		// Honse
+		SoundHelper.Client.addSound(MOD_ID, "horsegrunt1.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "horsegrunt2.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "horsegrunt3.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "horsehurt1.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "horsehurt2.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "horsedying.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "horsemad.ogg");
 	}
 }

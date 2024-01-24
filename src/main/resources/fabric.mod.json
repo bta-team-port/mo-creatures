@@ -19,13 +19,16 @@
 
   "environment": "*",
   "entrypoints": {
-    "main": [
-			"teamport.creatures.MoCreatures"
-    ],
 		"beforeGameStart": [
 			"teamport.creatures.MoCreatures"
 		],
 		"afterGameStart": [
+			"teamport.creatures.MoCreatures"
+		],
+		"beforeClientStart": [
+			"teamport.creatures.MoCreatures"
+		],
+		"afterClientStart": [
 			"teamport.creatures.MoCreatures"
 		],
 		"recipesReady": [
@@ -35,6 +38,8 @@
   "mixins": [
 		"creatures.mixins.json"
   ],
+
+	"accessWidener": "creatures.accesswidener",
 
   "depends": {
     "fabricloader": ">=0.13.3"
