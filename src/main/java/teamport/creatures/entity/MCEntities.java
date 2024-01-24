@@ -1,30 +1,26 @@
 package teamport.creatures.entity;
 
-import teamport.creatures.entity.render.BirdRenderer;
-import teamport.creatures.entity.render.BoarRenderer;
-import teamport.creatures.entity.render.BunnyRenderer;
-import teamport.creatures.entity.render.FoxRenderer;
+import teamport.creatures.entity.render.*;
 import turniplabs.halplibe.helper.EntityHelper;
 
 public class MCEntities {
-
-	public static void initializeEntities() {
-		// Foxes
+	public static void initEntityCore() {
 		EntityHelper.Core.createEntity(EntityFox.class, 255, "fox");
-		EntityHelper.Client.assignEntityRenderer(EntityFox.class, new FoxRenderer());
 		EntityHelper.Core.createEntity(EntityFoxArctic.class, 256, "arcticfox");
-		EntityHelper.Client.assignEntityRenderer(EntityFoxArctic.class, new FoxRenderer());
-
-		// THE HOG
 		EntityHelper.Core.createEntity(EntityBoar.class, 257, "boar");
-		EntityHelper.Client.assignEntityRenderer(EntityBoar.class, new BoarRenderer());
-
-		// Bunnies
 		EntityHelper.Core.createEntity(EntityBunny.class, 258, "bunny");
-		EntityHelper.Client.assignEntityRenderer(EntityBunny.class, new BunnyRenderer());
-
-		// Birds
 		EntityHelper.Core.createEntity(EntityBird.class, 259, "bird");
+		EntityHelper.Core.createEntity(EntityHorse.class, 260, "horse");
+		EntityHelper.Core.createEntity(EntityHorseUnicorn.class, 261, "unicorn");
+	}
+
+	public static void initEntityClient() {
+		EntityHelper.Client.assignEntityRenderer(EntityFox.class, new FoxRenderer());
+		EntityHelper.Client.assignEntityRenderer(EntityFoxArctic.class, new FoxRenderer());
+		EntityHelper.Client.assignEntityRenderer(EntityBoar.class, new BoarRenderer());
+		EntityHelper.Client.assignEntityRenderer(EntityBunny.class, new BunnyRenderer());
 		EntityHelper.Client.assignEntityRenderer(EntityBird.class, new BirdRenderer());
+		EntityHelper.Client.assignEntityRenderer(EntityHorse.class, new HorseRenderer());
+		EntityHelper.Client.assignEntityRenderer(EntityHorseUnicorn.class, new HorseUnicornRenderer());
 	}
 }

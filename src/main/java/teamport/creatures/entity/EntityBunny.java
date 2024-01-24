@@ -2,7 +2,6 @@ package teamport.creatures.entity;
 
 import com.mojang.nbt.CompoundTag;
 import net.minecraft.core.entity.animal.EntityAnimal;
-import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.world.World;
 import useless.dragonfly.model.entity.AnimationState;
 

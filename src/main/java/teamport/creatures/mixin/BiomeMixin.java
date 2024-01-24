@@ -19,7 +19,7 @@ public abstract class BiomeMixin {
 	@Inject(method = "<init>", at = @At("TAIL"))
 	private void creatures_addMobs(CallbackInfo ci) {
 		spawnableCreatureList.add(new SpawnListEntry(EntityFox.class, 10));
-		spawnableCreatureList.add(new SpawnListEntry(EntityFoxArctic.class, 10));
+		spawnableCreatureList.add(new SpawnListEntry(EntityFoxArctic.class, 5));
 		spawnableCreatureList.add(new SpawnListEntry(EntityBoar.class, 50));
 		spawnableCreatureList.add(new SpawnListEntry(EntityBunny.class, 40));
 		spawnableCreatureList.add(new SpawnListEntry(EntityBird.class, 20));

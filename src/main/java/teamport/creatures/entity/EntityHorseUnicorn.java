@@ -3,49 +3,46 @@ package teamport.creatures.entity;
 import com.mojang.nbt.CompoundTag;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.entity.EntityItem;
-import net.minecraft.core.entity.animal.EntityAnimal;
 import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.util.helper.DamageType;
 import net.minecraft.core.util.helper.MathHelper;
-import net.minecraft.core.util.phys.AABB;
 import net.minecraft.core.world.World;
 
-import java.util.List;
-
-public class EntityBoar extends EntityAnimal {
-	boolean angry;
-	int angerCounter;
-
-	public EntityBoar(World world) {
+public class EntityHorseUnicorn extends EntityHorse {
+	private boolean angry;
+	private int angerCounter = 0;
+	public EntityHorseUnicorn(World world) {
 		super(world);
-		setSize(0.9F, 0.9F);
-		health = 10;
 	}
 
 	@Override
 	public String getEntityTexture() {
-		return "/assets/creatures/entity/boar/0.png";
+		return "/assets/creatures/entity/horse/3.png";
 	}
 
 	@Override
-	public String getDefaultEntityTexture() {
-		return "/assets/creatures/entity/boar/0.png";
-	}
-
-	@Override
-	public void tick() {
-		super.tick();
-		if (angerCounter-- > 0) {
-			angry = true;
-		} else {
-			angry = false;
+	protected void updatePlayerActionState() {
+		super.updatePlayerActionState();
+		if (annoyance > 260) {
+			this.angerCounter = 1200;
 		}
+
+		if (this.angerCounter > 0) {
+			--this.angerCounter;
+			this.angry = true;
+		} else {
+			this.angry = false;
+		}
+
+		if (this.tamed) this.angry = false;
+
+		System.out.println(angerCounter);
 	}
 
 	@Override
 	public boolean hurt(Entity attacker, int damage, DamageType type) {
 		if (attacker instanceof EntityPlayer) {
-			this.angerCounter = 400;
+			this.angerCounter = 1200;
 		}
 		return super.hurt(attacker, damage, type);
 	}
@@ -54,7 +51,6 @@ public class EntityBoar extends EntityAnimal {
 	protected Entity findPlayerToAttack() {
 		return angry ? world.getClosestPlayerToEntity(this, 16.0D) : null;
 	}
-
 
 	@Override
 	protected void attackEntity(Entity entity, float distance) {
@@ -77,35 +73,16 @@ public class EntityBoar extends EntityAnimal {
 	}
 
 	@Override
-	protected void updatePlayerActionState() {
-		super.updatePlayerActionState();
-		if (this.entityToAttack == null && !this.hasPath() && this.world.rand.nextInt(200) == 0) {
-			List<Entity> nearbyPlayers = this.world
-				.getEntitiesWithinAABB(
-					EntityPlayer.class, AABB.getBoundingBoxFromPool(this.x, this.y, this.z, this.x + 1.0, this.y + 1.0, this.z + 1.0).expand(16.0, 4.0, 16.0)
-				);
-			if (!nearbyPlayers.isEmpty())
-				this.setTarget(nearbyPlayers.get(this.world.rand.nextInt(nearbyPlayers.size())));
-		}
-	}
-
-	@Override
-	public void playLivingSound() {
-		world.playSoundAtEntity(this,
-			getLivingSound(),
-			getSoundVolume(),
-			(this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 0.6F);
-	}
-
-	@Override
 	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
-		tag.putInt("Anger", this.angerCounter);
+		tag.putBoolean("Angry", this.angry);
+		tag.putInt("AngerCounter", this.angerCounter);
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag) {
 		super.readAdditionalSaveData(tag);
-		this.angerCounter = tag.getInteger("Anger");
+		this.angry = tag.getBoolean("Angry");
+		this.angerCounter = tag.getInteger("AngerCounter");
 	}
 }
