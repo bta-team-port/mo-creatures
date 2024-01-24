@@ -94,13 +94,21 @@ public class EntityHorse extends EntityAnimal {
 	public void moveEntityWithHeading(float moveStrafing, float moveForward) {
 		if (this.saddled && this.passenger != null) {
 			PlayerInput passengerInput = ((EntityPlayerSP) passenger).input;
-			if (passengerInput.jump && !this.noPhysics) this.yd = 0.42;
+			if (passengerInput.jump && !this.noPhysics && this.onGround) this.yd = 0.42;
 			this.yRot = passenger.yRot;
 
 			super.moveEntityWithHeading(passengerInput.moveStrafe, passengerInput.moveForward);
 		} else {
 			super.moveEntityWithHeading(moveStrafing, moveForward);
 		}
+	}
+	@Override
+	public float getYRotDelta(){
+		return 0;
+	}
+	@Override
+	public float getXRotDelta(){
+		return 0;
 	}
 
 	@Override
