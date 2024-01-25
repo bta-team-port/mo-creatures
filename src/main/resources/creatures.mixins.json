@@ -4,7 +4,8 @@
   "package": "teamport.creatures.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BiomeMixin"
+    "BiomeMixin",
+    "EntityPlayerMixin"
   ],
   "client": [
   ],

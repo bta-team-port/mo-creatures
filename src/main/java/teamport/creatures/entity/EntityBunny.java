@@ -2,6 +2,8 @@ package teamport.creatures.entity;
 
 import com.mojang.nbt.CompoundTag;
 import net.minecraft.core.entity.animal.EntityAnimal;
+import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.world.World;
 import useless.dragonfly.model.entity.AnimationState;
 
@@ -14,7 +16,7 @@ public class EntityBunny extends EntityAnimal {
 		super(world);
 		this.health = 5;
 		this.jumpDelay = 0;
-		this.setSize(0.4F, 0.25F);
+		this.setSize(0.4F, 0.4F);
 		this.skinVariant = random.nextInt(5);
 	}
 
@@ -38,8 +40,11 @@ public class EntityBunny extends EntityAnimal {
 
 			this.jumpDelay = this.random.nextInt(20) + 10;
 			this.isJumping = true;
-			jumpState.start(tickCount);
-			world.playSoundAtEntity(this, "creatures.rabbitland", 1.0F, 1.0F);
+			jumpState.start(this.tickCount);
+			world.playSoundAtEntity(this,
+				"creatures.rabbitland",
+				1.0F,
+				(this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
 
 			this.moveStrafing = 1.0F - this.random.nextFloat() * 2.0F;
 			this.moveForward = 1.0F;
@@ -55,6 +60,30 @@ public class EntityBunny extends EntityAnimal {
 				this.xRot = this.defaultPitch;
 			}
 		}
+	}
+
+	@Override
+	public boolean interact(EntityPlayer entityplayer) {
+		ItemStack item = entityplayer.inventory.getCurrentItem();
+		if (item == null && entityplayer.passenger == null) {
+			this.startRiding(entityplayer);
+			world.playSoundAtEntity(this,
+				"creatures.rabbitland",
+				1.0F,
+				(this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+		} else if (entityplayer.passenger != null) {
+			entityplayer.ejectRider();
+			world.playSoundAtEntity(entityplayer,
+				"creatures.rabbitland",
+				1.0F,
+				(this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
+
+			this.setPos(entityplayer.x, entityplayer.y, entityplayer.z);
+			this.moveForward = 1.0F;
+			this.jump();
+			this.jumpState.start(tickCount);
+		}
+		return super.interact(entityplayer);
 	}
 
 	@Override
