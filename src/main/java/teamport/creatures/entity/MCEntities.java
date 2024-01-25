@@ -12,6 +12,7 @@ public class MCEntities {
 		EntityHelper.Core.createEntity(EntityBird.class, 259, "bird");
 		EntityHelper.Core.createEntity(EntityHorse.class, 260, "horse");
 		EntityHelper.Core.createEntity(EntityHorseUnicorn.class, 261, "unicorn");
+		EntityHelper.Core.createEntity(EntityHorsePegasus.class, 262, "pegasus");
 	}
 
 	public static void initEntityClient() {
@@ -22,5 +23,6 @@ public class MCEntities {
 		EntityHelper.Client.assignEntityRenderer(EntityBird.class, new BirdRenderer());
 		EntityHelper.Client.assignEntityRenderer(EntityHorse.class, new HorseRenderer());
 		EntityHelper.Client.assignEntityRenderer(EntityHorseUnicorn.class, new HorseUnicornRenderer());
+		EntityHelper.Client.assignEntityRenderer(EntityHorsePegasus.class, new HorsePegasusRenderer());
 	}
 }

@@ -97,6 +97,18 @@ public class EntityBoar extends EntityAnimal {
 			(this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 0.6F);
 	}
 
+	public String getLivingSound() {
+		return "mob.pig";
+	}
+
+	protected String getHurtSound() {
+		return "mob.pig";
+	}
+
+	protected String getDeathSound() {
+		return "mob.pigdeath";
+	}
+
 	@Override
 	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
