@@ -12,6 +12,10 @@ public class MoCreatures implements GameStartEntrypoint, ClientStartEntrypoint, 
     public static final String MOD_ID = "creatures";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
+	// IDEAS LIST //
+	// Hand Cannon Bunnies
+	// TNT Bunnies
+
 	@Override
 	public void beforeGameStart() {
 		MCEntities.initEntityCore();

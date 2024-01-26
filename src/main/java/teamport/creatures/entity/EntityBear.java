@@ -12,48 +12,43 @@ import net.minecraft.core.world.World;
 
 import java.util.List;
 
-public class EntityBoar extends EntityAnimal {
-	private boolean angry;
-	private int angerCounter;
-	public EntityBoar(World world) {
+public class EntityBear extends EntityAnimal {
+	private boolean attackedByPlayer;
+	public EntityBear(World world) {
 		super(world);
-		setSize(0.9F, 0.9F);
-		health = 10;
+		this.setSize(2.0F, 2.0F);
+		this.health = 30;
 	}
 
 	@Override
 	public String getEntityTexture() {
-		return "/assets/creatures/entity/boar/0.png";
+		return "/assets/creatures/entity/bear/0.png";
 	}
 
 	@Override
 	public String getDefaultEntityTexture() {
-		return "/assets/creatures/entity/boar/0.png";
-	}
-
-	@Override
-	public void tick() {
-		super.tick();
-        angry = angerCounter-- > 0 && this.world.difficultySetting != 0;
+		return "/assets/creatures/entity/bear/0.png";
 	}
 
 	@Override
 	public boolean hurt(Entity attacker, int damage, DamageType type) {
-		this.angerCounter = 400;
-		return super.hurt(attacker, damage, type);
+		if (attacker instanceof EntityPlayer) {
+			this.attackedByPlayer = true;
+		}
+
+		return attacker != this && super.hurt(attacker, damage, type);
 	}
 
 	@Override
 	protected Entity findPlayerToAttack() {
-		return angry ? world.getClosestPlayerToEntity(this, 16.0D) : null;
+		return attackedByPlayer ? world.getClosestPlayerToEntity(this, 16.0D) : null;
 	}
-
 
 	@Override
 	protected void attackEntity(Entity entity, float distance) {
 		if (!(entity instanceof EntityItem)) {
 			if (!(distance > 2.0F) || !(distance < 6.0F) || this.random.nextInt(10) != 0) {
-				if ((double)distance < 1.5 && entity.bb.maxY > this.bb.minY && entity.bb.minY < this.bb.maxY) {
+				if ((double)distance < 3 && entity.bb.maxY > this.bb.minY && entity.bb.minY < this.bb.maxY) {
 					this.attackTime = 20;
 					entity.hurt(this, 2, DamageType.COMBAT);
 				}
@@ -70,48 +65,50 @@ public class EntityBoar extends EntityAnimal {
 
 	@Override
 	protected void updatePlayerActionState() {
-		super.updatePlayerActionState();
-		if (this.entityToAttack == null && !this.hasPath() && this.world.rand.nextInt(200) == 0) {
-			List<Entity> nearbyPlayers = this.world
-				.getEntitiesWithinAABB(
-					EntityPlayer.class, AABB.getBoundingBoxFromPool(this.x, this.y, this.z, this.x + 1.0, this.y + 1.0, this.z + 1.0).expand(16.0, 4.0, 16.0)
+		if (this.entityToAttack == null && !this.hasPath() && this.world.rand.nextInt(100) == 0) {
+			List<Entity> nearbyAnimals = this.world
+				.getEntitiesWithinAABBExcludingEntity(
+					this, AABB.getBoundingBoxFromPool(this.x, this.y, this.z, this.x + 1.0, this.y + 1.0, this.z + 1.0).expand(16.0, 4.0, 16.0)
 				);
-			if (!nearbyPlayers.isEmpty() && this.world.difficultySetting != 0)
-				this.setTarget(nearbyPlayers.get(this.world.rand.nextInt(nearbyPlayers.size())));
+
+			if (!nearbyAnimals.isEmpty()) {
+				Entity getNearbyAnimal = nearbyAnimals.get(this.world.rand.nextInt(nearbyAnimals.size()));
+
+				if (getNearbyAnimal instanceof EntityAnimal) {
+					this.setTarget(getNearbyAnimal);
+				}
+			}
+		} else {
+			super.updatePlayerActionState();
+		}
+
+		if (this.getTarget() instanceof EntityBear) {
+			this.setTarget(null);
 		}
 	}
 
-	@Override
-	public void playLivingSound() {
-		world.playSoundAtEntity(this,
-			getLivingSound(),
-			getSoundVolume(),
-			(this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 0.6F);
-	}
 
 	public String getLivingSound() {
-		return "mob.pig";
+		return "creatures.beargrunt";
 	}
 
 	protected String getHurtSound() {
-		return "mob.pig";
+		return "creatures.bearhurt";
 	}
 
 	protected String getDeathSound() {
-		return "mob.pigdeath";
+		return "creatures.beardeath";
 	}
 
 	@Override
 	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
-		tag.putBoolean("Angry", this.angry);
-		tag.putInt("Anger", this.angerCounter);
+		tag.putBoolean("AttackedByPlayer", this.attackedByPlayer);
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag) {
 		super.readAdditionalSaveData(tag);
-		this.angry = tag.getBoolean("Angry");
-		this.angerCounter = tag.getInteger("Anger");
+		this.attackedByPlayer = tag.getBoolean("AttackedByPlayer");
 	}
 }

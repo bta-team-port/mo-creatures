@@ -7,7 +7,7 @@ import static teamport.creatures.MoCreatures.MOD_ID;
 public class MCSounds {
 
 	public static void initializeSounds() {
-		// Fox
+		// Foxes (dun dun dun dun)
 		SoundHelper.Client.addSound(MOD_ID, "foxcall1.wav");
 		SoundHelper.Client.addSound(MOD_ID, "foxcall2.wav");
 		SoundHelper.Client.addSound(MOD_ID, "foxdying.wav");
@@ -21,7 +21,7 @@ public class MCSounds {
 		SoundHelper.Client.addSound(MOD_ID, "rabbitland.ogg");
 		SoundHelper.Client.addSound(MOD_ID, "rabbitlift.ogg");
 
-		// Birds (oh boy)
+		// Birds
 		SoundHelper.Client.addSound(MOD_ID, "birdblack1.ogg");
 		SoundHelper.Client.addSound(MOD_ID, "birdblack2.ogg");
 		SoundHelper.Client.addSound(MOD_ID, "birdblack3.ogg");
@@ -44,7 +44,7 @@ public class MCSounds {
 		SoundHelper.Client.addSound(MOD_ID, "birdyellow4.ogg");
 		SoundHelper.Client.addSound(MOD_ID, "birdyellow5.ogg");
 
-		// Honse
+		// Honses
 		SoundHelper.Client.addSound(MOD_ID, "horsegrunt1.ogg");
 		SoundHelper.Client.addSound(MOD_ID, "horsegrunt2.ogg");
 		SoundHelper.Client.addSound(MOD_ID, "horsegrunt3.ogg");
@@ -52,5 +52,15 @@ public class MCSounds {
 		SoundHelper.Client.addSound(MOD_ID, "horsehurt2.ogg");
 		SoundHelper.Client.addSound(MOD_ID, "horsedying.ogg");
 		SoundHelper.Client.addSound(MOD_ID, "horsemad.ogg");
+
+		// Bears
+		SoundHelper.Client.addSound(MOD_ID, "beardeath.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "beargrunt1.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "beargrunt2.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "beargrunt3.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "beargrunt4.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "beargrunt5.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "bearhurt1.ogg");
+		SoundHelper.Client.addSound(MOD_ID, "bearhurt2.ogg");
 	}
 }

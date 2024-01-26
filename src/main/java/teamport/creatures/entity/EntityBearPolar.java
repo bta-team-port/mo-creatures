@@ -4,24 +4,19 @@ import net.minecraft.core.world.World;
 import net.minecraft.core.world.biome.Biome;
 import net.minecraft.core.world.biome.Biomes;
 
-public class EntityFoxArctic extends EntityFox {
-	public EntityFoxArctic(World world) {
+public class EntityBearPolar extends EntityBear {
+	public EntityBearPolar(World world) {
 		super(world);
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
-	}
-
-	@Override
 	public String getEntityTexture() {
-		return "/assets/creatures/entity/fox/1.png";
+		return "/assets/creatures/entity/bear/1.png";
 	}
 
 	@Override
 	public String getDefaultEntityTexture() {
-		return "/assets/creatures/entity/fox/1.png";
+		return "/assets/creatures/entity/bear/1.png";
 	}
 
 	@Override
