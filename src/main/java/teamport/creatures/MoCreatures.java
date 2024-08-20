@@ -3,12 +3,11 @@ package teamport.creatures;
 import net.fabricmc.api.ModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import teamport.creatures.block.MCBlocks;
-import teamport.creatures.entity.MCEntities;
-import teamport.creatures.item.MCItems;
+import teamport.creatures.core.MCBlocks;
+import teamport.creatures.core.MCEntities;
+import teamport.creatures.core.MCItems;
 import turniplabs.halplibe.util.ClientStartEntrypoint;
 import turniplabs.halplibe.util.GameStartEntrypoint;
-import turniplabs.halplibe.util.RecipeEntrypoint;
 
 
 public class MoCreatures implements ModInitializer, GameStartEntrypoint, ClientStartEntrypoint {
@@ -28,9 +27,11 @@ public class MoCreatures implements ModInitializer, GameStartEntrypoint, ClientS
 	@Override
 	public void beforeGameStart() {
 		MCBlocks.initializeBlocks();
-		MCBlocks.initializeCoreTiles();
+		MCBlocks.initializeTiles();
 		MCItems.initializeItems();
-		MCEntities.initEntityCore();
+
+		MCEntities.initEntities();
+		MCSounds.initializeSounds();
 	}
 
 	@Override
@@ -40,9 +41,7 @@ public class MoCreatures implements ModInitializer, GameStartEntrypoint, ClientS
 
 	@Override
 	public void beforeClientStart() {
-		MCBlocks.initializeClientTiles();
-		MCSounds.initializeSounds();
-		MCEntities.initEntityClient();
+		MCBlocks.initializeTiles();
 	}
 
 	@Override
