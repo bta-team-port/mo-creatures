@@ -5,9 +5,9 @@ import net.minecraft.core.entity.Entity;
 import net.minecraft.core.entity.EntityItem;
 import net.minecraft.core.entity.EntityLiving;
 import net.minecraft.core.entity.animal.EntityAnimal;
+import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.item.ItemSeeds;
-import net.minecraft.core.util.helper.DamageType;
-import net.minecraft.core.util.helper.MathHelper;
+import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.util.phys.AABB;
 import net.minecraft.core.world.World;
 import org.useless.dragonfly.model.entity.AnimationState;
@@ -19,9 +19,7 @@ public class BirdEntity extends EntityAnimal {
 	private int courseChangeCoolDown = 0;
 	private int courseCoolDown = 200;
 	private int skinVariant;
-	private int afraidTick = 0;
-	private boolean isFed = false;
-	private boolean isAfraid = true;
+	public boolean isFed;
 
 	public BirdEntity(World world) {
 		super(world);
@@ -29,6 +27,7 @@ public class BirdEntity extends EntityAnimal {
 
 		skinVariant = random.nextInt(6);
 		speed = 0.05f;
+		isFed = false;
 	}
 
 	@Override
@@ -76,120 +75,124 @@ public class BirdEntity extends EntityAnimal {
 	}
 
 	@Override
-	public void moveEntityWithHeading(float moveStrafing, float moveForward) {
-		if ((courseCoolDown-- <= 0 && courseCoolDown > -400)) {
-			xd *= 0.455;
-			yd *= 0.455;
-			zd *= 0.455;
-
-			yd += y < (double) world.getHeightBlocks() / 2 ? 0.025f : -0.025f;
-
-			if (random.nextFloat() < 0.05F) randomYawVelocity = (random.nextFloat() - 0.5F) * 20.0F;
-			yRot += randomYawVelocity;
-			xRot = defaultPitch;
-
-			moveForward = 0.3f;
-			moveStrafing = moveForward;
-			moveRelative(moveStrafing, moveForward, 0.2f);
-
-		} else if (courseCoolDown > 0) {
-			xd = 0.0f;
-			zd = 0.0f;
-
-			if (!this.onGround) {
-				yd = -0.05f;
-				moveForward = 0.1f;
-			}
-
-			super.moveEntityWithHeading(moveStrafing, moveForward);
-		}
-
-		if (courseCoolDown <= -400) courseCoolDown = random.nextInt(400) + 600;
-
-		if (isInWater() || isInLava()) jump();
-
-		move(xd, yd, zd);
-	}
-
-	@Override
 	protected void updatePlayerActionState() {
 		super.updatePlayerActionState();
-		moveEntityWithHeading(moveStrafing, moveForward);
-		flyState.animateWhen(courseCoolDown <= 0, tickCount);
+		flyState.animateWhen(!onGround, tickCount);
 
-		// Seed check
-		List<Entity> nearbyItems = world
-			.getEntitiesWithinAABB(EntityItem.class, AABB.getBoundingBoxFromPool(x, y, z, x + 1.0, y + 1.0, z + 1.0)
-					.expand(16.0, 16.0, 16.0)
-			);
-		if (!nearbyItems.isEmpty() && !isAfraid) {
-			Entity entityItem = null;
-			for (Entity nearbyItem : nearbyItems) {
-				entityItem = nearbyItem;
+		if (courseCoolDown-- <= 0 && courseCoolDown > -400 && getTarget() == null) {
+			moveForward = 1.2F;
+
+			if (courseChangeCoolDown++ >= 100) {
+				courseChangeCoolDown = 0;
+				roamRandomPath();
 			}
-			if (entityItem != null) {
-				if (((EntityItem) entityItem).item.getItem() instanceof ItemSeeds) {
-					courseCoolDown = random.nextInt(200) + 300;
-					setTarget(entityItem);
 
-					// If the item is seeds and the entities are colliding, feed the birb.
-					if (bb.intersectsWith(entityItem.bb)) {
-						entityItem.remove();
-						isFed = true;
+			// Very simple flying code - if a block is or isn't null 6 blocks below the bird
+			// then raise or lower the Y double.
+			if (world.getBlock((int) x, (int) (bb.minY - 6), (int) z) == null) {
+				this.yd -= 0.1;
+			} else if (world.getBlock((int) x, (int) (bb.minY - 6), (int) z) != null) {
+				this.yd += 0.1;
+			}
+		} else if (courseCoolDown > 0) {
+			flyState.stop();
+
+			if (!onGround) {
+				moveForward = 1.0F;
+				this.yd -= 0.1;
+			}
+		}
+
+
+		if (courseCoolDown <= -400) {
+			courseCoolDown = random.nextInt(400) + 400;
+		}
+
+		if (isInWater() || isInLava()) this.yd = 0.005;
+
+		// SEED CODE
+		// Check for nearby items within the AABB (expanded by 16 blocks)
+		// If the item isn't null and is an instance of anything that extends seeds it will set the target to the item.
+		if (entityToAttack == null) {
+			List<Entity> nearbyItems = world
+				.getEntitiesWithinAABB(EntityItem.class, AABB.getBoundingBoxFromPool(x,
+						y,
+						z,
+						x + 1.0,
+						y + 1.0,
+						z + 1.0)
+					.expand(16.0, 4.0, 16.0)
+				);
+
+			if (!nearbyItems.isEmpty()) {
+				for (Entity nearbySeeds : nearbyItems) {
+					if (nearbySeeds instanceof EntityItem && ((EntityItem) nearbySeeds).item.getItem() instanceof ItemSeeds) {
+						setTarget(nearbySeeds);
 					}
 				}
 			}
 		}
 
-		// Nearby entity check
-		List<Entity> nearbyLiving = world.
-			getEntitiesWithinAABB(EntityLiving.class, AABB.getBoundingBoxFromPool(x, y, z, x + 1.0, y + 1.0, z + 1.0)
-			.expand(12.0, 16.0, 12.0));
-
-		if (!nearbyLiving.isEmpty() && !(nearbyLiving instanceof BirdEntity) && !isFed) {
-			speed = 0.1f;
-			roamRandomPath();
+		if (getTarget() != null && getTarget() instanceof EntityItem) {
+			if (bb.expand(0.5, 2.0, 0.5).intersectsWith(getTarget().bb)) {
+				getTarget().remove();
+				isFed = true;
+			}
 		}
 
-		// Fear check
-		if (afraidTick > 0) {
-			afraidTick--;
-			isFed = false;
-			isAfraid = true;
-			courseCoolDown = 0;
+		// Simple spooking code. If there's any 'living' entities within the AABB expanded by 16 it will fly rapidly.
+		// The 'faceEntity' call should make it face the opposite direction.
+		// UNLESS if it's a player! If they're in creative or sneaking then the bird will act as normal.
+		// Another exception is if it's fed.
+		List<Entity> nearbyLiving = world
+			.getEntitiesWithinAABB(EntityLiving.class, AABB.getBoundingBoxFromPool(x,
+					y,
+					z,
+					x + 1.0,
+					y + 1.0,
+					z + 1.0)
+				.expand(8.0, 6.0, 8.0)
+			);
 
-			speed = 0.1f;
-			roamRandomPath();
-		} else {
-			isAfraid = false;
-			speed = 0.05f;
-		}
-	}
+		if (!nearbyLiving.isEmpty()) {
+			for (Entity entity : nearbyLiving) {
+				if (!(entity instanceof EntityPlayer) && !(entity instanceof BirdEntity) ||
+					(entity instanceof EntityPlayer && !entity.isSneaking() &&
+						((EntityPlayer) entity).gamemode.areMobsHostile()) &&
+						!isFed) {
+					courseCoolDown = -250;
+					moveForward = 2.0F;
 
-	@Override
-	protected void attackEntity(Entity entity, float distance) {
-		if (!(entity instanceof EntityItem)) {
-			if (!(distance > 2.0F) || !(distance < 6.0F) || this.random.nextInt(10) != 0) {
-				if ((double)distance < 3 && entity.bb.maxY > this.bb.minY && entity.bb.minY < this.bb.maxY) {
-					this.attackTime = 20;
-					entity.hurt(this, 2, DamageType.COMBAT);
+					faceEntity(entity, 0.0F, 0.0F);
 				}
-			} else if (this.onGround) {
-				double d = entity.x - this.x;
-				double d1 = entity.z - this.z;
-				float f1 = MathHelper.sqrt_double(d * d + d1 * d1);
-				this.xd = d / (double)f1 * 0.5 * 0.8F + this.xd * 0.2F;
-				this.zd = d1 / (double)f1 * 0.5 * 0.8F + this.zd * 0.2F;
-				this.yd = 0.4F;
+			}
+		} else {
+			moveForward = 1.2F;
+		}
+
+		if (getHealth() < getMaxHealth()) {
+			courseCoolDown = -250;
+			moveForward = 2.0F;
+			isFed = false;
+
+			roamRandomPath();
+		}
+
+		// EXPERIMENTAL //
+		// Player follow code for the upcoming 7.3 release. Follow items are: Seeds.
+		EntityPlayer player = world.getClosestPlayerToEntity(this, 16.0);
+		if (isFed && player != null && (player.distanceToSqr(x, y, z) > 4.0)) {
+			ItemStack heldStack = player.getCurrentEquippedItem();
+			if (heldStack != null && heldStack.getItem() instanceof ItemSeeds) {
+				faceEntity(player, 30.0F, 30.0F);
+				moveForward = 1.0F;
+
+				if (player.distanceToSqr(this) <= 12.0)
+					moveForward = 0.0F;
 			}
 		}
 	}
 
-	@Override
-	public boolean hurt(Entity attacker, int damage, DamageType type) {
-		afraidTick = 1200;
-		return super.hurt(attacker, damage, type);
-	}
 
 	@Override
 	protected void causeFallDamage(float f) {
@@ -197,9 +200,8 @@ public class BirdEntity extends EntityAnimal {
 
 	@Override
 	protected void jump() {
-		if (courseCoolDown <= 0 || isInWater()) {
-			super.jump();
-		}
+		this.yd = 0.84;
+		super.jump();
 	}
 
 	@Override
@@ -208,8 +210,7 @@ public class BirdEntity extends EntityAnimal {
 		tag.putInt("SkinVariant", skinVariant);
 		tag.putInt("CourseCoolDown", courseCoolDown);
 		tag.putInt("CourseChangeCoolDown", courseChangeCoolDown);
-		tag.putInt("AfraidTick", afraidTick);
-		tag.putBoolean("Fed", isFed);
+		tag.putBoolean("IsFed", isFed);
 	}
 
 	@Override
@@ -218,7 +219,6 @@ public class BirdEntity extends EntityAnimal {
 		skinVariant = tag.getInteger("SkinVariant");
 		courseCoolDown = tag.getInteger("CourseCoolDown");
 		courseChangeCoolDown = tag.getInteger("CourseChangeCoolDown");
-		afraidTick = tag.getInteger("AfraidTick");
-		isFed = tag.getBoolean("Fed");
+		isFed = tag.getBoolean("IsFed");
 	}
 }

@@ -57,7 +57,7 @@ public class DeerEntity extends EntityAnimal {
 	@Override
 	protected void updatePlayerActionState() {
 		super.updatePlayerActionState();
-		EntityPlayer player = world.getClosestPlayerToEntity(this, 16.0f);
+		EntityPlayer player = world.getClosestPlayerToEntity(this, 16.0);
 
 		// Just a simple flee system;
 		// Checks if the player isn't null, isn't sneaking, and isn't in creative

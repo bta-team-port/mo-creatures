@@ -2,7 +2,6 @@ package teamport.creatures.core;
 
 import net.minecraft.core.item.Item;
 import net.minecraft.core.item.ItemPlaceable;
-import turniplabs.halplibe.helper.ArmorHelper;
 import turniplabs.halplibe.helper.ItemBuilder;
 
 import static teamport.creatures.MoCreatures.MOD_ID;
