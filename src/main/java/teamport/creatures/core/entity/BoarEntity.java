@@ -24,7 +24,6 @@ public class BoarEntity extends EntityAnimal {
 	public BoarEntity(World world) {
 		super(world);
 		setSize(0.9F, 0.9F);
-		heartsHalvesLife = 10;
 
 		mobDrops.add(new WeightedRandomLootObject(Item.foodPorkchopRaw.getDefaultStack(), 1, 2));
 		burningMobDrops.add(new WeightedRandomLootObject(Item.foodPorkchopCooked.getDefaultStack(), 1, 2));

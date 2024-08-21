@@ -5,6 +5,9 @@ import net.minecraft.core.entity.Entity;
 import net.minecraft.core.entity.EntityItem;
 import net.minecraft.core.entity.animal.EntityAnimal;
 import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.item.Item;
+import net.minecraft.core.item.ItemFood;
+import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.util.helper.DamageType;
 import net.minecraft.core.util.helper.MathHelper;
 import net.minecraft.core.util.phys.AABB;
@@ -17,7 +20,11 @@ public class BearEntity extends EntityAnimal {
 	public BearEntity(World world) {
 		super(world);
 		this.setSize(2.0F, 2.0F);
-		this.heartsHalvesLife = 30;
+	}
+
+	@Override
+	public int getMaxHealth() {
+		return 40;
 	}
 
 	@Override
@@ -50,7 +57,7 @@ public class BearEntity extends EntityAnimal {
 			if (!(distance > 2.0F) || !(distance < 6.0F) || this.random.nextInt(10) != 0) {
 				if ((double)distance < 3 && entity.bb.maxY > this.bb.minY && entity.bb.minY < this.bb.maxY) {
 					this.attackTime = 20;
-					entity.hurt(this, 2, DamageType.COMBAT);
+					entity.hurt(this, 6, DamageType.COMBAT);
 				}
 			} else if (this.onGround) {
 				double d = entity.x - this.x;
@@ -82,8 +89,18 @@ public class BearEntity extends EntityAnimal {
 			super.updatePlayerActionState();
 		}
 
-		if (this.getTarget() instanceof BearEntity) {
-			this.setTarget(null);
+		if (getTarget() instanceof BearEntity) {
+			setTarget(null);
+		}
+
+		// EXPERIMENTAL //
+		// Player follow code for the upcoming 7.3 release. Follow items are: Food.
+		EntityPlayer player = world.getClosestPlayerToEntity(this, 16.0);
+		if (player != null && player.distanceToSqr(this) > 4.0 && player.gamemode.areMobsHostile()) {
+			ItemStack heldStack = player.getCurrentEquippedItem();
+			if (heldStack != null && heldStack.getItem() instanceof ItemFood) {
+				setTarget(player);
+			}
 		}
 	}
 

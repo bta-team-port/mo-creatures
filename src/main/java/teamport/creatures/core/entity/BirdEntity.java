@@ -27,9 +27,13 @@ public class BirdEntity extends EntityAnimal {
 		super(world);
 		setSize(0.25F, 0.25F);
 
-		heartsHalvesLife = 5;
 		skinVariant = random.nextInt(6);
 		speed = 0.05f;
+	}
+
+	@Override
+	public int getMaxHealth() {
+		return 5;
 	}
 
 	@Override
@@ -147,7 +151,7 @@ public class BirdEntity extends EntityAnimal {
 			roamRandomPath();
 		}
 
-		// Afraid check
+		// Fear check
 		if (afraidTick > 0) {
 			afraidTick--;
 			isFed = false;

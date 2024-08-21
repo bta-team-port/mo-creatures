@@ -22,37 +22,6 @@ public class PegasusEntity extends HorseEntity {
 	}
 
 	@Override
-	public boolean interact(EntityPlayer entityplayer) {
-		super.interact(entityplayer);
-		ItemStack item = entityplayer.inventory.getCurrentItem();
-		if (item != null) {
-			if (item.itemID == Item.foodApple.id) {
-				chanceForTame += random.nextInt(2) + 1;
-				item.consumeItem(entityplayer);
-				world.playSoundAtEntity(null, this, "creatures.eating", 1.0f, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
-			}
-			if (item.itemID == Item.dustSugar.id) {
-				chanceForTame += random.nextInt(5) + 1;
-				item.consumeItem(entityplayer);
-				world.playSoundAtEntity(null, this, "creatures.eating", 1.0f, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
-			}
-			if (item.itemID == Item.foodAppleGold.id) {
-				chanceForTame += random.nextInt(100) + 1;
-				item.consumeItem(entityplayer);
-				world.playSoundAtEntity(null, this, "creatures.eating", 1.0f, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
-			}
-
-			if (tamed && item.itemID == Item.saddle.id) {
-				saddled = true;
-				item.consumeItem(entityplayer);
-			}
-		} else {
-			entityplayer.startRiding(this);
-		}
-		return false;
-	}
-
-	@Override
 	protected void updatePlayerActionState() {
 		super.updatePlayerActionState();
 		if (passenger != null && !tamed) {
@@ -125,6 +94,7 @@ public class PegasusEntity extends HorseEntity {
 		if (!world.isClientSide) {
 			if (passenger == null) {
 				super.jump();
+				yd = 0.52;
 			} else {
 				yd = 0.21;
 				if (isSprinting()) {

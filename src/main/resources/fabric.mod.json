@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Mo Creatures",
-  "description": "A port and remake of the classic Mo Creatures.",
+  "description": "A remake of the classic version of Mo Creatures.",
   "authors": [
 		"DrZhark (original mod)",
     "Team Port"

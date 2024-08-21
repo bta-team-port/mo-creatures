@@ -19,9 +19,13 @@ public class HorseEntity extends EntityAnimal {
 
 	public HorseEntity(World world) {
 		super(world);
-		heartsHalvesLife = 30;
 		skinVariant = random.nextInt(3);
 		setSize(0.8F, 2.0F);
+	}
+
+	@Override
+	public int getMaxHealth() {
+		return 20;
 	}
 
 	@Override
@@ -35,33 +39,50 @@ public class HorseEntity extends EntityAnimal {
 	}
 
 	@Override
-	public boolean interact(EntityPlayer entityplayer) {
-		super.interact(entityplayer);
-		ItemStack item = entityplayer.inventory.getCurrentItem();
+	public boolean interact(EntityPlayer player) {
+		super.interact(player);
+		ItemStack item = player.inventory.getCurrentItem();
 		if (item != null) {
-			if (item.itemID == Item.wheat.id) {
-				chanceForTame += 1;
-				item.consumeItem(entityplayer);
-				world.playSoundAtEntity(null, this, "creatures.eating", 1.0f, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
-			}
-			if (item.itemID == Item.foodApple.id) {
-				chanceForTame += random.nextInt(4) + 1;
-				item.consumeItem(entityplayer);
-				world.playSoundAtEntity(null, this, "creatures.eating", 1.0f, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
+			if (!tamed) {
+				if (item.itemID == Item.wheat.id) {
+					chanceForTame += 1;
+					item.consumeItem(player);
+					world.playSoundAtEntity(null, this, "creatures.eating", 1.0f, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
+				}
+				if (item.itemID == Item.foodApple.id) {
+					chanceForTame += random.nextInt(4) + 1;
+					item.consumeItem(player);
+					world.playSoundAtEntity(null, this, "creatures.eating", 1.0f, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
 
-			}
-			if (item.itemID == Item.dustSugar.id) {
-				chanceForTame += random.nextInt(8) + 1;
-				item.consumeItem(entityplayer);
-				world.playSoundAtEntity(null, this, "creatures.eating", 1.0f, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
+				}
+				if (item.itemID == Item.dustSugar.id) {
+					chanceForTame += random.nextInt(8) + 1;
+					item.consumeItem(player);
+					world.playSoundAtEntity(null, this, "creatures.eating", 1.0f, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
+				}
 			}
 
-			if (tamed && item.itemID == Item.saddle.id) {
-				saddled = true;
-				item.consumeItem(entityplayer);
+			if (tamed) {
+				if (item.itemID == Item.saddle.id) {
+					saddled = true;
+					item.consumeItem(player);
+				}
+
+				if (getHealth() < getMaxHealth()) {
+					if (item.itemID == Item.wheat.id) {
+						heal(2);
+						item.consumeItem(player);
+						world.playSoundAtEntity(null, this, "creatures.eating", 1.0f, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
+					}
+					if (item.itemID == Item.foodApple.id) {
+						heal(4);
+						item.consumeItem(player);
+						world.playSoundAtEntity(null, this, "creatures.eating", 1.0f, (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
+					}
+				}
 			}
 		} else {
-			entityplayer.startRiding(this);
+			player.startRiding(this);
 		}
 		return false;
 	}
@@ -101,6 +122,20 @@ public class HorseEntity extends EntityAnimal {
 
 					world.spawnParticle("heart", randX, randY + 0.22, randZ, 0.0, 0.2, 0.0, 0);
 				}
+			}
+		}
+
+		// EXPERIMENTAL //
+		// Player follow code for the upcoming 7.3 release. Follow items are: Wheat and Sugar.
+		EntityPlayer player = world.getClosestPlayerToEntity(this, 16.0);
+		if (player != null && (player.distanceToSqr(x, y, z) > 4.0)) {
+			ItemStack heldStack = player.getCurrentEquippedItem();
+			if (heldStack != null && (heldStack.itemID == Item.wheat.id || heldStack.itemID == Item.dustSugar.id)) {
+				faceEntity(player, 30.0F, 30.0F);
+				moveForward = 1.0F;
+
+				if (player.distanceToSqr(this) <= 12.0)
+					moveForward = 0.0F;
 			}
 		}
 	}
@@ -143,7 +178,7 @@ public class HorseEntity extends EntityAnimal {
 
 	@Override
 	protected boolean canDespawn() {
-		return !tamed && super.canDespawn();
+		return !tamed || super.canDespawn();
 	}
 
 	@Override

@@ -28,5 +28,15 @@ public class DeerModel extends BenchEntityModel {
 			this.getIndexBones().get("legRightBack")
 				.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbYaw;
 		}
+
+		// Hardcoded antler rotation values due to Dragonfly bugs.
+		if (getIndexBones().containsKey("antlerLeft")) {
+			getIndexBones().get("antlerLeft")
+				.setRotationAngle(-0.225F, 0.0F, 0.0F);
+		}
+		if (getIndexBones().containsKey("antlerRight")) {
+			getIndexBones().get("antlerRight")
+				.setRotationAngle(-0.225F, 0.0F, 0.0F);
+		}
 	}
 }

@@ -1,11 +1,7 @@
 package teamport.creatures.core.entity;
 
 import com.mojang.nbt.CompoundTag;
-import net.minecraft.core.block.Block;
-import net.minecraft.core.block.BlockGrass;
-import net.minecraft.core.block.BlockIce;
 import net.minecraft.core.block.BlockTallGrass;
-import net.minecraft.core.entity.EntityItem;
 import net.minecraft.core.entity.animal.EntityAnimal;
 import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.item.ItemStack;
@@ -13,7 +9,6 @@ import net.minecraft.core.item.block.ItemBlock;
 import net.minecraft.core.sound.SoundCategory;
 import net.minecraft.core.world.World;
 import org.useless.dragonfly.model.entity.AnimationState;
-import teamport.creatures.MoCreatures;
 
 public class BunnyEntity extends EntityAnimal {
 	public AnimationState jumpState = new AnimationState();
@@ -26,11 +21,15 @@ public class BunnyEntity extends EntityAnimal {
 		super(world);
 		setSize(0.4F, 0.4F);
 
-		heartsHalvesLife = 5;
 		whenToJump = random.nextInt(200) + 200;
 		skinVariant = random.nextInt(5);
 		timesToJump = 0;
 		jumpDelay = random.nextInt(10) + 10;
+	}
+
+	@Override
+	public int getMaxHealth() {
+		return 5;
 	}
 
 	@Override
@@ -98,14 +97,16 @@ public class BunnyEntity extends EntityAnimal {
 		// EXPERIMENTAL //
 		// Player follow code for the upcoming 7.3 release. Follow item is: tall grass (and friends).
 		EntityPlayer player = world.getClosestPlayerToEntity(this, 16.0);
-		if (player != null) {
+		if (player != null && player.distanceToSqr(this) > 4.0) {
 			ItemStack heldStack = player.getCurrentEquippedItem();
-
-			if (heldStack != null && player.distanceToSqr(x, y, z) > 3.0) {
+			if (heldStack != null) {
 				if (heldStack.getItem() instanceof ItemBlock &&
 					((ItemBlock) heldStack.getItem()).getBlock() instanceof BlockTallGrass) {
 					faceEntity(player, 30.0F, 30.0F);
 					timesToJump = 1;
+
+					if (player.distanceToSqr(this) <= 12.0)
+						timesToJump = 0;
 				}
 			}
 		}

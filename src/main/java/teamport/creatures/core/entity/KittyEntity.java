@@ -16,16 +16,13 @@ import net.minecraft.core.world.World;
 import teamport.creatures.core.block.entity.LitterboxTile;
 
 import java.util.List;
-import java.util.Objects;
 
 public class KittyEntity extends EntityAnimal {
 	public boolean isTamed = false;
-	public boolean setToFollow = false;
 	public String ownerName;
 	private int skin;
 	private int potty;
 	private int usingPottyTime = 0;
-	private int discomfortTime;
 	private int boredom;
 	private final float soundPitch = (random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F;
 
@@ -99,10 +96,6 @@ public class KittyEntity extends EntityAnimal {
 					heldItem.consumeItem(player);
 				}
 			}
-		} else if (heldItem == null && Objects.equals(player.username, ownerName) && !setToFollow) {
-			setToFollow = true;
-		} else if (setToFollow) {
-			setToFollow = false;
 		}
 
 		return true;
@@ -211,6 +204,20 @@ public class KittyEntity extends EntityAnimal {
 						}
 					}
 				}
+			}
+		}
+
+		// EXPERIMENTAL //
+		// Player follow code for the upcoming 7.3 release. Follow items are: Fish.
+		EntityPlayer player = world.getClosestPlayerToEntity(this, 16.0);
+		if (player != null && (player.distanceToSqr(x, y, z) > 4.0)) {
+			ItemStack heldStack = player.getCurrentEquippedItem();
+			if (heldStack != null && heldStack.itemID == Item.foodFishRaw.id) {
+				faceEntity(player, 30.0F, 30.0F);
+				moveForward = 1.0F;
+
+				if (player.distanceToSqr(this) <= 12.0)
+					moveForward = 0.0F;
 			}
 		}
 	}

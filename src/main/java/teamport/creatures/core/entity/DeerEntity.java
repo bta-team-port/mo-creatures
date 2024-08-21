@@ -23,7 +23,6 @@ public class DeerEntity extends EntityAnimal {
 		super(world);
 		setSize(0.3f, 2.0f);
 
-		heartsHalvesLife = 10;
 		if (random.nextInt(2) == 0) isBuck = true;
 		mobDrops.add(new WeightedRandomLootObject(Item.foodPorkchopRaw.getDefaultStack(), 1, 2));
 		burningMobDrops.add(new WeightedRandomLootObject(Item.foodPorkchopCooked.getDefaultStack(), 1, 2));
@@ -64,10 +63,10 @@ public class DeerEntity extends EntityAnimal {
 		// Checks if the player isn't null, isn't sneaking, and isn't in creative
 		// or if it's in a fear state
 		if (player != null && !player.isSneaking() && player.gamemode.areMobsHostile()) {
-			faceEntity(player, 0, 0);
+			faceEntity(player, 0.0F, 0.0F);
 
 			speed = 0.2f;
-			roamRandomPath();
+			moveForward = 1.0F;
 		} else if (isScared) {
 			speed = 0.2f;
 			roamRandomPath();
@@ -91,12 +90,14 @@ public class DeerEntity extends EntityAnimal {
 	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
 		tag.putInt("ScaredTick", scaredTick);
+		tag.putBoolean("IsBuck", isBuck);
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag) {
 		super.readAdditionalSaveData(tag);
 		scaredTick = tag.getInteger("ScaredTick");
+		isBuck = tag.getBoolean("IsBuck");
 	}
 
 	@Override

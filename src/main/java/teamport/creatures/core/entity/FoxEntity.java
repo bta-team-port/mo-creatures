@@ -6,6 +6,8 @@ import net.minecraft.core.entity.EntityItem;
 import net.minecraft.core.entity.animal.EntityAnimal;
 import net.minecraft.core.entity.animal.EntityChicken;
 import net.minecraft.core.entity.player.EntityPlayer;
+import net.minecraft.core.item.Item;
+import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.util.helper.DamageType;
 import net.minecraft.core.util.helper.MathHelper;
 import net.minecraft.core.util.phys.AABB;
@@ -19,7 +21,6 @@ public class FoxEntity extends EntityAnimal {
 
 	public FoxEntity(World world) {
 		super(world);
-		heartsHalvesLife = 10;
 	}
 
 	@Override
@@ -71,25 +72,39 @@ public class FoxEntity extends EntityAnimal {
 		}
 	}
 
+	// Due to every entity the fox for check for, I added this function to compensate.
+	private void checkForEntitiesToAttack(Class<? extends Entity> entityClass) {
+		if (entityToAttack == null && !hasPath() && world.rand.nextInt(100) == 0) {
+			List<Entity> nearbyEntities = world
+				.getEntitiesWithinAABB(entityClass, AABB.getBoundingBoxFromPool(x, y, z, x + 1.0, y + 1.0, z + 1.0)
+					.expand(16.0, 4.0, 16.0)
+				);
+
+			if (!nearbyEntities.isEmpty()) setTarget(nearbyEntities.get(world.rand.nextInt(nearbyEntities.size())));
+		}
+	}
+
 	@Override
 	protected void updatePlayerActionState() {
 		super.updatePlayerActionState();
-		if (entityToAttack == null && !hasPath() && world.rand.nextInt(100) == 0) {
-			List<Entity> nearbyChickens = world
-				.getEntitiesWithinAABB(
-					EntityChicken.class, AABB.getBoundingBoxFromPool(x, y, z, x + 1.0, y + 1.0, z + 1.0).expand(16.0, 4.0, 16.0)
-				);
-			if (!nearbyChickens.isEmpty())
-                setTarget(nearbyChickens.get(world.rand.nextInt(nearbyChickens.size())));
-		}
 
-		if (entityToAttack == null && !hasPath() && world.rand.nextInt(100) == 0) {
-			List<Entity> nearbyBirds = world
-				.getEntitiesWithinAABB(
-					BirdEntity.class, AABB.getBoundingBoxFromPool(x, y, z, x + 1.0, y + 1.0, z + 1.0).expand(16.0, 4.0, 16.0)
-				);
-			if (!nearbyBirds.isEmpty())
-				setTarget(nearbyBirds.get(world.rand.nextInt(nearbyBirds.size())));
+		checkForEntitiesToAttack(BirdEntity.class);
+		checkForEntitiesToAttack(EntityChicken.class);
+		checkForEntitiesToAttack(DuckEntity.class);
+		checkForEntitiesToAttack(BunnyEntity.class);
+
+		// EXPERIMENTAL //
+		// Player follow code for the upcoming 7.3 release. Follow item is: eggs.
+		EntityPlayer player = world.getClosestPlayerToEntity(this, 16.0);
+		if (player != null && (player.distanceToSqr(x, y, z) > 4.0)) {
+			ItemStack heldStack = player.getCurrentEquippedItem();
+			if (heldStack != null && heldStack.itemID == Item.eggChicken.id) {
+				faceEntity(player, 30.0F, 30.0F);
+				moveForward = 1.0F;
+
+				if (player.distanceToSqr(this) <= 12.0)
+					moveForward = 0.0F;
+			}
 		}
 	}
 
