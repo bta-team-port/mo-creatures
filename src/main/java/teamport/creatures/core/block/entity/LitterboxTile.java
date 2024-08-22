@@ -45,7 +45,7 @@ public class LitterboxTile extends TileEntity implements IVehicle {
 
 	@Override
 	public void positionRider() {
-		passenger.setPos(x, (double)y + 0.5 + passenger.getRidingHeight(), z);
+		passenger.setPos(x + 0.5, (double)y + 0.5 + passenger.getRidingHeight(), z + 0.5);
 	}
 
 	@Override
@@ -79,5 +79,4 @@ public class LitterboxTile extends TileEntity implements IVehicle {
 			worldObj.updateEntity(passenger);
 		}
 	}
-
 }

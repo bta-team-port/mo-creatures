@@ -8,6 +8,7 @@ import net.minecraft.core.entity.animal.EntityAnimal;
 import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.item.Item;
 import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.sound.SoundCategory;
 import net.minecraft.core.util.helper.DamageType;
 import net.minecraft.core.util.helper.MathHelper;
 import net.minecraft.core.util.phys.AABB;
@@ -33,7 +34,7 @@ public class KittyEntity extends EntityAnimal {
 		heartsHalvesLife = 10;
 		skin = random.nextInt(4);
 		boredom = random.nextInt(400) + 800;
-		potty = random.nextInt(200) + 200;
+		potty = random.nextInt(6000) + 6000;
 	}
 
 	@Override
@@ -72,14 +73,21 @@ public class KittyEntity extends EntityAnimal {
 
 	@Override
 	public boolean interact(EntityPlayer player) {
-		ItemStack heldItem = player.getHeldItem();
+		if (!world.isClientSide) {
+			ItemStack heldItem = player.getHeldItem();
 
-		if (heldItem != null && heldItem.itemID == Item.foodFishRaw.id) {
-			if (!isTamed) {
-				world.playSoundAtEntity(null, this, "creatures.kittyeating", 1.0F, soundPitch);
+			if (heldItem != null && heldItem.itemID == Item.foodFishRaw.id) {
+				if (!isTamed) {
+					world.playSoundEffect(player,
+						SoundCategory.ENTITY_SOUNDS,
+						x,
+						y,
+						z,
+						"creatures.kittyeating",
+						1.0F,
+						soundPitch);
 
-				if (!world.isClientSide) {
-					faceEntity(player, 1.0F, 1.0F);
+					faceEntity(player, 30.0F, 30.0F);
 					heldItem.consumeItem(player);
 
 					if (random.nextInt(3) == 0) {
@@ -89,11 +97,11 @@ public class KittyEntity extends EntityAnimal {
 					} else {
 						showHeartsOrSmokeFX(false);
 					}
-				}
-			} else {
-				if (!world.isClientSide) {
-					heal(4);
-					heldItem.consumeItem(player);
+				} else {
+					if (!world.isClientSide) {
+						heal(2);
+						heldItem.consumeItem(player);
+					}
 				}
 			}
 		}
@@ -130,7 +138,7 @@ public class KittyEntity extends EntityAnimal {
 		if (!(entity instanceof EntityItem)) {
 			if (!(distance > 2.0F) || !(distance < 6.0F) || this.random.nextInt(10) != 0) {
 				if ((double) distance < 1.5 && entity.bb.maxY > this.bb.minY && entity.bb.minY < this.bb.maxY) {
-					this.attackTime = 20;
+					attackTime = 20;
 					entity.hurt(this, 2, DamageType.COMBAT);
 				}
 			} else if (this.onGround) {
@@ -148,58 +156,78 @@ public class KittyEntity extends EntityAnimal {
 	protected void updatePlayerActionState() {
 		super.updatePlayerActionState();
 
-		List<Entity> nearbyEntities = world.getEntitiesWithinAABB(Entity.class, AABB.getBoundingBoxFromPool(x, y - 6.0F, z, x + 16.0F, y + 6.0F, z + 16.0F));
+		// String search code for when the kitty is bored.
+		// When the boredom is below 0 and above -400 it will find for nearby item entities.
+		// If it isn't null and the item is string, start 'playing' with it.
+		// Once the boredom reaches -400 it will reset.
+		if (entityToAttack == null && boredom-- <= 0) {
+			List<Entity> nearbyEntities = world
+				.getEntitiesWithinAABB(EntityItem.class, AABB.getBoundingBoxFromPool(bb.minX,
+						bb.minY,
+						bb.minZ,
+						bb.maxX,
+						bb.maxY,
+						bb.maxZ)
+					.expand(16.0, 4.0, 16.0)
+				);
 
-		if (!nearbyEntities.isEmpty() && random.nextInt(20) == 0) {
-			for (Entity entities : nearbyEntities) {
-				// Check for an EntityItem with an ID of string.
-
-				if (boredom-- <= 0) {
-					if (entities instanceof EntityItem) {
-						ItemStack stringItem = ((EntityItem) entities).item;
-						if (stringItem.itemID == Item.string.id) {
-							setTarget(entities);
-
-							if (entities.collidesWith(this)) {
-								entities.xd = 0.05F;
-								entities.yd = 0.10F;
-							}
-
-							if (boredom <= -400) {
-								setTarget(null);
-								boredom = random.nextInt(400) + 800;
-							}
-						}
+			if (!nearbyEntities.isEmpty()) {
+				for (Entity entity : nearbyEntities) {
+					if (entity instanceof EntityItem && ((EntityItem) entity).item.itemID == Item.string.id) {
+						setTarget(entity);
 					}
-				}
-
-				// Bird check!
-				if (entities instanceof BirdEntity) {
-					entityToAttack = entities;
 				}
 			}
 		}
 
+		if (boredom-- <= -400) {
+			boredom = random.nextInt(400) + 800;
+		}
+
+		if (getTarget() != null && getTarget() instanceof EntityItem) {
+			if (bb.expand(0.5, 2.0, 0.5).intersectsWith(getTarget().bb)) {
+				getTarget().move(xd * (random.nextInt(3) + 1), yd + 0.1, zd * (random.nextInt(3) + 1));
+			}
+		}
+
+		// Same AI as above, just with birds instead.
+		if (entityToAttack == null && boredom-- <= 0) {
+			List<Entity> nearbyBirds = world
+				.getEntitiesWithinAABB(BirdEntity.class, AABB.getBoundingBoxFromPool(bb.minX,
+						bb.minY,
+						bb.minZ,
+						bb.maxX,
+						bb.maxY,
+						bb.maxZ)
+					.expand(16.0, 4.0, 16.0)
+				);
+
+			if (!nearbyBirds.isEmpty()) {
+				setTarget(nearbyBirds.get(world.rand.nextInt(nearbyBirds.size())));
+			}
+		}
+
+
 		if (isTamed) {
-			potty--;
-			List<TileEntity> tileEntities = world.loadedTileEntityList;
+			if (potty-- <= 0) {
+				List<TileEntity> tileEntities = world.loadedTileEntityList;
 
-			if (!tileEntities.isEmpty()) {
-				for (TileEntity tileEntity : tileEntities) {
-					if (tileEntity instanceof LitterboxTile && !((LitterboxTile) tileEntity).isFilthy && potty <= 0) {
-						pathToEntity = world.getEntityPathToXYZ(this, tileEntity.x, tileEntity.y, tileEntity.z, 16.0F);
-						if (distanceToSqr(tileEntity.x, tileEntity.y, tileEntity.z) < 4.5F && !isPassenger()) {
-							setPos(tileEntity.x, tileEntity.y, tileEntity.z);
-							startRiding((IVehicle) tileEntity);
-							usingPottyTime = 200;
-						}
+				if (!tileEntities.isEmpty()) {
+					for (TileEntity tileEntity : tileEntities) {
+						if (tileEntity instanceof LitterboxTile) {
+							if (!((LitterboxTile) tileEntity).isFilthy && potty <= 0) {
+								pathToEntity = world.getEntityPathToXYZ(this, tileEntity.x, tileEntity.y, tileEntity.z, 16.0F);
+								if (distanceToSqr(tileEntity.x, tileEntity.y, tileEntity.z) < 4.0 && !isPassenger()) {
+									setPos(tileEntity.x, tileEntity.y, tileEntity.z);
+									startRiding((IVehicle) tileEntity);
+								}
+							}
 
-						if (isPassenger()) {
-							if (usingPottyTime-- <= 200) {
+							if (isPassenger() && usingPottyTime-- <= -200) {
 								((LitterboxTile) tileEntity).ejectRider();
 								((LitterboxTile) tileEntity).isFilthy = true;
 								usingPottyTime = 0;
-								potty = random.nextInt(200) + 200;
+								potty = random.nextInt(6000) + 6000;
 							}
 						}
 					}
@@ -227,7 +255,6 @@ public class KittyEntity extends EntityAnimal {
 		super.addAdditionalSaveData(tag);
 		tag.putBoolean("IsTamed", isTamed);
 		tag.putInt("Skin", skin);
-		tag.putInt("Potty", potty);
 
 		if (isTamed) tag.putString("Owner", ownerName);
 	}
@@ -237,7 +264,6 @@ public class KittyEntity extends EntityAnimal {
 		super.readAdditionalSaveData(tag);
 		isTamed = tag.getBoolean("IsTamed");
 		skin = tag.getInteger("Skin");
-		potty = tag.getInteger("Potty");
 
 		if (isTamed) ownerName = tag.getString("Owner");
 	}
