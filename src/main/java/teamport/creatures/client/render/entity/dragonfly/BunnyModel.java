@@ -1,4 +1,4 @@
-package teamport.creatures.client.render.entity;
+package teamport.creatures.client.render.entity.dragonfly;
 
 import net.minecraft.core.entity.EntityLiving;
 import org.useless.dragonfly.helper.AnimationHelper;
@@ -9,12 +9,12 @@ import teamport.creatures.core.entity.BunnyEntity;
 import static teamport.creatures.MoCreatures.MOD_ID;
 
 public class BunnyModel extends BenchEntityModel {
-	public static BunnyEntity bunny;
+	private BunnyEntity entity;
 
 	@Override
 	public void setLivingAnimations(EntityLiving entityliving, float limbSwing, float limbYaw, float partialTick) {
 		super.setLivingAnimations(entityliving, limbSwing, limbYaw, partialTick);
-		if (entityliving instanceof BunnyEntity) bunny = (BunnyEntity) entityliving;
+		if (entityliving instanceof BunnyEntity) entity = (BunnyEntity) entityliving;
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class BunnyModel extends BenchEntityModel {
 		}
 
 		Animation jumpAnim = AnimationHelper.getOrCreateEntityAnimation(MOD_ID, "bunny.animation");
-		if (bunny != null)
-			animate(bunny.jumpState, jumpAnim.getAnimations().get("animation.bunny.jump"), limbPitch, 1.0F);
+		if (entity != null)
+			animate(entity.jumpState, jumpAnim.getAnimations().get("animation.bunny.jump"), limbPitch, 1.0F);
 	}
 }

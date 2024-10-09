@@ -17,9 +17,11 @@ import net.minecraft.core.world.World;
 import teamport.creatures.core.block.entity.LitterboxTile;
 
 import java.util.List;
+import java.util.Objects;
 
 public class KittyEntity extends EntityAnimal {
 	public boolean isTamed = false;
+	public boolean isSitting = false;
 	public String ownerName;
 	private int skin;
 	private int potty;
@@ -103,6 +105,10 @@ public class KittyEntity extends EntityAnimal {
 						heldItem.consumeItem(player);
 					}
 				}
+			}
+
+			if (isTamed && Objects.equals(player.username, ownerName) && player.getHeldItem() == null) {
+				isSitting = !isSitting;
 			}
 		}
 
@@ -209,6 +215,13 @@ public class KittyEntity extends EntityAnimal {
 
 
 		if (isTamed) {
+			if (isSitting) {
+				moveForward = 0.0f;
+				moveStrafing = 0.0f;
+				isJumping = false;
+			}
+
+			// Potty system - use a litter box once? a day.
 			if (potty-- <= 0) {
 				List<TileEntity> tileEntities = world.loadedTileEntityList;
 
@@ -238,9 +251,9 @@ public class KittyEntity extends EntityAnimal {
 		// EXPERIMENTAL //
 		// Player follow code for the upcoming 7.3 release. Follow items are: Fish.
 		EntityPlayer player = world.getClosestPlayerToEntity(this, 16.0);
-		if (player != null && (player.distanceToSqr(x, y, z) > 4.0)) {
+		if (player != null && player.distanceToSqr(x, y, z) > 4.0) {
 			ItemStack heldStack = player.getCurrentEquippedItem();
-			if (heldStack != null && heldStack.itemID == Item.foodFishRaw.id) {
+			if (heldStack != null && !isSitting && heldStack.itemID == Item.foodFishRaw.id) {
 				faceEntity(player, 30.0F, 30.0F);
 				moveForward = 1.0F;
 
@@ -254,6 +267,7 @@ public class KittyEntity extends EntityAnimal {
 	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
 		tag.putBoolean("IsTamed", isTamed);
+		tag.putBoolean("IsSitting", isSitting);
 		tag.putInt("Skin", skin);
 
 		if (isTamed) tag.putString("Owner", ownerName);
@@ -263,6 +277,7 @@ public class KittyEntity extends EntityAnimal {
 	public void readAdditionalSaveData(CompoundTag tag) {
 		super.readAdditionalSaveData(tag);
 		isTamed = tag.getBoolean("IsTamed");
+		isSitting = tag.getBoolean("IsSitting");
 		skin = tag.getInteger("Skin");
 
 		if (isTamed) ownerName = tag.getString("Owner");

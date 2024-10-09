@@ -1,4 +1,4 @@
-package teamport.creatures.client.render.entity;
+package teamport.creatures.client.render.entity.dragonfly;
 
 import net.minecraft.core.util.helper.MathHelper;
 import org.useless.dragonfly.model.entity.BenchEntityModel;

@@ -1,23 +1,29 @@
 package teamport.creatures.core;
 
+import teamport.creatures.MCConfig;
 import teamport.creatures.client.render.entity.*;
 import teamport.creatures.core.entity.*;
 import turniplabs.halplibe.helper.EntityHelper;
 
 public class MCEntities {
+	private static int startingID = MCConfig.cfg.getInt("IDs.startingEntityID");
+	private static int nextID() {
+		return ++startingID;
+	}
+
 	public static void initEntities() {
-		EntityHelper.createEntity(FoxEntity.class, 100, "Fox", FoxRenderer::new);
-		EntityHelper.createEntity(ArcticFoxEntity.class, 101, "ArcticFox", FoxRenderer::new);
-		EntityHelper.createEntity(BoarEntity.class, 102, "Boar", BoarRenderer::new);
-		EntityHelper.createEntity(BunnyEntity.class, 103, "Bunny", BunnyRenderer::new);
-		EntityHelper.createEntity(BirdEntity.class, 104, "Bird", BirdRenderer::new);
-		EntityHelper.createEntity(HorseEntity.class, 105, "Horse", HorseRenderer::new);
-		EntityHelper.createEntity(UnicornEntity.class, 106, "Unicorn", UnicornRenderer::new);
-		EntityHelper.createEntity(PegasusEntity.class, 107, "Pegasus", PegasusRenderer::new);
-		EntityHelper.createEntity(BearEntity.class, 108, "Bear", BearRenderer::new);
-		EntityHelper.createEntity(PolarBearEntity.class, 109, "PolarBear", BearRenderer::new);
-		EntityHelper.createEntity(DeerEntity.class, 110, "Deer", DeerRenderer::new);
-		EntityHelper.createEntity(DuckEntity.class, 111, "Duck", DuckRenderer::new);
-		EntityHelper.createEntity(KittyEntity.class, 112, "Kitty", KittyRenderer::new);
+		EntityHelper.createEntity(FoxEntity.class, nextID(), "Fox", FoxRenderer::new);
+		EntityHelper.createEntity(ArcticFoxEntity.class, nextID(), "ArcticFox", FoxRenderer::new);
+		EntityHelper.createEntity(BoarEntity.class, nextID(), "Boar", BoarRenderer::new);
+		EntityHelper.createEntity(BunnyEntity.class, nextID(), "Bunny", BunnyRenderer::new);
+		EntityHelper.createEntity(BirdEntity.class, nextID(), "Bird", BirdRenderer::new);
+		EntityHelper.createEntity(HorseEntity.class, nextID(), "Horse", HorseRenderer::new);
+		EntityHelper.createEntity(UnicornEntity.class, nextID(), "Unicorn", UnicornRenderer::new);
+		EntityHelper.createEntity(PegasusEntity.class, nextID(), "Pegasus", PegasusRenderer::new);
+		EntityHelper.createEntity(BearEntity.class, nextID(), "Bear", BearRenderer::new);
+		EntityHelper.createEntity(PolarBearEntity.class, nextID(), "PolarBear", BearRenderer::new);
+		EntityHelper.createEntity(DeerEntity.class, nextID(), "Deer", DeerRenderer::new);
+		EntityHelper.createEntity(DuckEntity.class, nextID(), "Duck", DuckRenderer::new);
+		EntityHelper.createEntity(KittyEntity.class, nextID(), "Kitty", KittyRenderer::new);
 	}
 }

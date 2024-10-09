@@ -2,6 +2,7 @@ package teamport.creatures.client.render.entity;
 
 import net.minecraft.client.render.entity.LivingRenderer;
 import org.useless.dragonfly.helper.ModelHelper;
+import teamport.creatures.client.render.entity.dragonfly.BoarModel;
 import teamport.creatures.core.entity.BoarEntity;
 
 import static teamport.creatures.MoCreatures.MOD_ID;

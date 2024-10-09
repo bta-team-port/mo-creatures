@@ -3,8 +3,6 @@ package teamport.creatures.core.entity;
 import net.minecraft.client.entity.player.EntityPlayerSP;
 import net.minecraft.client.input.PlayerInput;
 import net.minecraft.core.entity.player.EntityPlayer;
-import net.minecraft.core.item.Item;
-import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.util.helper.MathHelper;
 import net.minecraft.core.world.World;
 import org.useless.dragonfly.model.entity.AnimationState;
@@ -24,7 +22,7 @@ public class PegasusEntity extends HorseEntity {
 	@Override
 	protected void updatePlayerActionState() {
 		super.updatePlayerActionState();
-		if (passenger != null && !tamed) {
+		if (passenger != null && !isTamed) {
 			EntityPlayer player = (EntityPlayer) passenger;
 
 			if (random.nextInt(6) == 0) {
@@ -46,12 +44,12 @@ public class PegasusEntity extends HorseEntity {
 					(random.nextFloat() - random.nextFloat()) * 0.2F + 1.0F);
 			}
 
-			if (passenger != null && !tamed) {
+			if (passenger != null && !isTamed) {
 				jump();
 			}
 
 			if (tameCounter++ >= 1600) {
-				tamed = true;
+				isTamed = true;
 
 				double randX = x + random.nextDouble();
 				double randY = y + random.nextDouble();
@@ -67,7 +65,7 @@ public class PegasusEntity extends HorseEntity {
 		if (passenger != null) {
 			if (isInWater() || isInLava()) ejectRider();
 
-			if (saddled) {
+			if (isSaddled) {
 				if (passenger instanceof EntityPlayerSP) {
 					PlayerInput passengerInput = ((EntityPlayerSP) passenger).input;
 					if (passengerInput.jump && y < (double) world.getHeightBlocks() / 2) jump();

@@ -1,4 +1,4 @@
-package teamport.creatures;
+package teamport.creatures.core;
 
 import turniplabs.halplibe.helper.SoundHelper;
 

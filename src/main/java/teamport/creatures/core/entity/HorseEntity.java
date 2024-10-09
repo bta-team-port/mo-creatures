@@ -3,19 +3,24 @@ package teamport.creatures.core.entity;
 import com.mojang.nbt.CompoundTag;
 import net.minecraft.client.entity.player.EntityPlayerSP;
 import net.minecraft.client.input.PlayerInput;
+import net.minecraft.core.entity.Entity;
 import net.minecraft.core.entity.animal.EntityAnimal;
 import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.item.Item;
 import net.minecraft.core.item.ItemStack;
+import net.minecraft.core.util.helper.DamageType;
 import net.minecraft.core.world.World;
 
+import java.util.Objects;
+
 public class HorseEntity extends EntityAnimal {
-	boolean tamed;
+	boolean isTamed;
 	int annoyance = 0;
 	int chanceForTame = 0;
 	int tameCounter = 0;
 	private int skinVariant;
-	public boolean saddled;
+	public boolean isSaddled;
+	public String ownerName;
 
 	public HorseEntity(World world) {
 		super(world);
@@ -43,7 +48,7 @@ public class HorseEntity extends EntityAnimal {
 		super.interact(player);
 		ItemStack item = player.inventory.getCurrentItem();
 		if (item != null) {
-			if (!tamed) {
+			if (!isTamed) {
 				if (item.itemID == Item.wheat.id) {
 					chanceForTame += 1;
 					item.consumeItem(player);
@@ -62,9 +67,9 @@ public class HorseEntity extends EntityAnimal {
 				}
 			}
 
-			if (tamed) {
+			if (isTamed && Objects.equals(player.username, ownerName)) {
 				if (item.itemID == Item.saddle.id) {
-					saddled = true;
+					isSaddled = true;
 					item.consumeItem(player);
 				}
 
@@ -90,7 +95,7 @@ public class HorseEntity extends EntityAnimal {
 	@Override
 	protected void updatePlayerActionState() {
 		super.updatePlayerActionState();
-		if (passenger != null && !tamed) {
+		if (passenger != null && !isTamed) {
 			EntityPlayer player = (EntityPlayer) passenger;
 
 			if (random.nextInt(6) == 0) {
@@ -113,7 +118,8 @@ public class HorseEntity extends EntityAnimal {
 			}
 
 			if (tameCounter++ >= 1000) {
-				tamed = true;
+				isTamed = true;
+				ownerName = ((EntityPlayer) passenger).username;
 
 				for (int i = 0; i < 8; i++) {
 					double randX = x + random.nextDouble();
@@ -145,7 +151,7 @@ public class HorseEntity extends EntityAnimal {
 		if (passenger != null) {
 			if (isInWater() || isInLava()) ejectRider();
 
-			if (saddled) {
+			if (isSaddled) {
 				if (passenger instanceof EntityPlayerSP) {
 					PlayerInput passengerInput = ((EntityPlayerSP) passenger).input;
 					if (passengerInput.jump && !noPhysics && onGround) yd = 0.42;
@@ -178,7 +184,7 @@ public class HorseEntity extends EntityAnimal {
 
 	@Override
 	protected boolean canDespawn() {
-		return !tamed || super.canDespawn();
+		return !isTamed || super.canDespawn();
 	}
 
 	@Override
@@ -199,7 +205,7 @@ public class HorseEntity extends EntityAnimal {
 	@Override
 	protected void dropFewItems() {
 		super.dropFewItems();
-		if (saddled) spawnAtLocation(Item.saddle.id, 1);
+		if (isSaddled) spawnAtLocation(Item.saddle.id, 1);
 	}
 
 	@Override
@@ -210,22 +216,40 @@ public class HorseEntity extends EntityAnimal {
 	@Override
 	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
-		tag.putBoolean("Tamed", tamed);
-		tag.putBoolean("Saddled", saddled);
+		tag.putBoolean("Tamed", isTamed);
+		tag.putBoolean("Saddled", isSaddled);
 		tag.putInt("ChanceForTame", chanceForTame);
 		tag.putInt("Annoyance", annoyance);
 		tag.putInt("TameCounter", tameCounter);
 		tag.putInt("SkinVariant", skinVariant);
+
+		if (isTamed) {
+			tag.putString("Owner", ownerName);
+		}
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag) {
 		super.readAdditionalSaveData(tag);
-		tamed = tag.getBoolean("Tamed");
-		saddled = tag.getBoolean("Saddled");
+		isTamed = tag.getBoolean("Tamed");
+		isSaddled = tag.getBoolean("Saddled");
 		chanceForTame = tag.getInteger("ChanceForTame");
 		annoyance = tag.getInteger("Annoyance");
 		tameCounter = tag.getInteger("TameCounter");
 		skinVariant = tag.getInteger("SkinVariant");
+
+		if (isTamed) {
+			ownerName = tag.getString("Owner");
+		}
+	}
+
+	@Override
+	public boolean hurt(Entity attacker, int damage, DamageType type) {
+		if (!world.isClientSide) {
+			if (attacker instanceof EntityPlayer && !isTamed) {
+				tameCounter -= 150;
+			}
+		}
+		return super.hurt(attacker, damage, type);
 	}
 }

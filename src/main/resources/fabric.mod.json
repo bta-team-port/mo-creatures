@@ -33,6 +33,9 @@
 		],
 		"afterClientStart": [
 			"teamport.creatures.MoCreatures"
+		],
+		"recipesReady": [
+			"teamport.creatures.core.MCRecipes"
 		]
 	},
   "mixins": [

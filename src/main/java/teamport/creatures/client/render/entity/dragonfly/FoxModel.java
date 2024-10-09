@@ -1,9 +1,9 @@
-package teamport.creatures.client.render.entity;
+package teamport.creatures.client.render.entity.dragonfly;
 
 import net.minecraft.core.util.helper.MathHelper;
 import org.useless.dragonfly.model.entity.BenchEntityModel;
 
-public class HorseModel extends BenchEntityModel {
+public class FoxModel extends BenchEntityModel {
 	@Override
 	public void setRotationAngles(float limbSwing, float limbYaw, float limbPitch, float headYaw, float headPitch, float scale) {
 		this.getIndexBones().forEach((s, benchEntityBones) -> benchEntityBones.resetPose());
@@ -11,12 +11,7 @@ public class HorseModel extends BenchEntityModel {
 
 		if (this.getIndexBones().containsKey("head")) {
 			this.getIndexBones().get("head")
-				.rotateAngleX = 0.30F;
-		}
-
-		if (this.getIndexBones().containsKey("neck")) {
-			this.getIndexBones().get("neck")
-				.rotateAngleX = 0.60F;
+				.setRotationAngle((float)Math.toRadians(headPitch), (float)Math.toRadians(headYaw), 0.0F);
 		}
 
 		if (this.getIndexBones().containsKey("legFrontLeft")) {
@@ -41,10 +36,7 @@ public class HorseModel extends BenchEntityModel {
 
 		if (this.getIndexBones().containsKey("tail")) {
 			this.getIndexBones().get("tail")
-				.rotateAngleX = -0.90F;
-
-			this.getIndexBones().get("tail")
-				.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * 0.5F * -0.55F;
+				.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 0.7F * -0.55F;
 		}
 	}
 }

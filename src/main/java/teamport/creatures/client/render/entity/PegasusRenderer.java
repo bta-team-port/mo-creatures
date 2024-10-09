@@ -2,6 +2,7 @@ package teamport.creatures.client.render.entity;
 
 import net.minecraft.client.render.entity.LivingRenderer;
 import org.useless.dragonfly.helper.ModelHelper;
+import teamport.creatures.client.render.entity.dragonfly.PegasusModel;
 import teamport.creatures.core.entity.PegasusEntity;
 
 import static teamport.creatures.MoCreatures.MOD_ID;
@@ -14,7 +15,7 @@ public class PegasusRenderer extends LivingRenderer<PegasusEntity> {
 
 	private boolean renderSaddle(PegasusEntity entity, int renderPass) {
 		this.loadTexture("/assets/creatures/textures/entity/horse/saddle_4.png");
-		return renderPass == 0 && entity != null && entity.saddled;
+		return renderPass == 0 && entity != null && entity.isSaddled;
 	}
 
 	@Override

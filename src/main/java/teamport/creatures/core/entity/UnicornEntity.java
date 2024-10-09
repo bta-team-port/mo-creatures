@@ -33,7 +33,7 @@ public class UnicornEntity extends HorseEntity {
 	@Override
 	protected void updatePlayerActionState() {
 		super.updatePlayerActionState();
-		if (passenger != null && !tamed) {
+		if (passenger != null && !isTamed) {
 			EntityPlayer player = (EntityPlayer) passenger;
 
 			if (random.nextInt(6) == 0) {
@@ -56,7 +56,7 @@ public class UnicornEntity extends HorseEntity {
 			}
 
 			if (tameCounter++ >= 1200) {
-				tamed = true;
+				isTamed = true;
 
 				double randX = x + random.nextDouble();
 				double randY = y + random.nextDouble();
