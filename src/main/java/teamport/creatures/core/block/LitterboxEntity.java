@@ -1,10 +1,10 @@
-package teamport.creatures.core.block.entity;
+package teamport.creatures.core.block;
 
 import net.minecraft.core.block.entity.TileEntity;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.world.IVehicle;
 
-public class LitterboxTile extends TileEntity implements IVehicle {
+public class LitterboxEntity extends TileEntity implements IVehicle {
 	private Entity passenger = null;
 	public boolean isFilthy = false;
 

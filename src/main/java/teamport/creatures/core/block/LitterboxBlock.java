@@ -9,7 +9,6 @@ import net.minecraft.core.enums.EnumDropCause;
 import net.minecraft.core.item.ItemStack;
 import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.world.World;
-import teamport.creatures.core.block.entity.LitterboxTile;
 import teamport.creatures.core.MCItems;
 
 public class LitterboxBlock extends BlockTileEntityRotatable {
@@ -21,12 +20,12 @@ public class LitterboxBlock extends BlockTileEntityRotatable {
 
 	@Override
 	protected TileEntity getNewBlockEntity() {
-		return new LitterboxTile();
+		return new LitterboxEntity();
 	}
 
 	@Override
 	public boolean onBlockRightClicked(World world, int x, int y, int z, EntityPlayer player, Side side, double xHit, double yHit) {
-		LitterboxTile tileEntity = (LitterboxTile) world.getBlockTileEntity(x, y, z);
+		LitterboxEntity tileEntity = (LitterboxEntity) world.getBlockTileEntity(x, y, z);
 		ItemStack heldItem = player.getHeldItem();
 
 		if (tileEntity != null && tileEntity.isFilthy) {

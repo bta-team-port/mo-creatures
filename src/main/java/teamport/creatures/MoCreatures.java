@@ -24,8 +24,7 @@ public class MoCreatures implements ModInitializer, GameStartEntrypoint, ClientS
 	// TNT bunnies
 	// Seahorses
 	// Horse armor
-
-	// TODO - Guidebook Entries
+	// Bee swarms
 
 	@Override
 	public void onInitialize() {

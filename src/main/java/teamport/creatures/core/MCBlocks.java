@@ -5,9 +5,10 @@ import net.minecraft.core.block.Block;
 import net.minecraft.core.block.tag.BlockTags;
 import net.minecraft.core.sound.BlockSounds;
 import teamport.creatures.MCConfig;
+import teamport.creatures.core.block.BeeHiveBlock;
 import teamport.creatures.core.block.LitterboxBlock;
 import teamport.creatures.client.render.block.LitterboxRenderer;
-import teamport.creatures.core.block.entity.LitterboxTile;
+import teamport.creatures.core.block.LitterboxEntity;
 import turniplabs.halplibe.helper.BlockBuilder;
 import turniplabs.halplibe.helper.EntityHelper;
 
@@ -25,10 +26,19 @@ public class MCBlocks {
 		.setTags(BlockTags.NOT_IN_CREATIVE_MENU)
 		.build(new LitterboxBlock("litterbox", nextID()));
 
+	public static final Block BEE_HIVE = new BlockBuilder(MOD_ID)
+		.setBlockSound(BlockSounds.WOOD)
+		.setTopTexture("creatures:block/bee_hive/top")
+		.setSideTextures("creatures:block/bee_hive/side")
+		.setBottomTexture("creatures:block/bee_hive/bottom")
+		.setHardness(2.0f)
+		.setTags(BlockTags.MINEABLE_BY_AXE)
+		.build(new BeeHiveBlock("bee_hive", nextID()));
+
 	public static void initializeBlocks() {
 	}
 
 	public static void initializeTiles() {
-		EntityHelper.createSpecialTileEntity(LitterboxTile.class, "Litterbox", LitterboxRenderer::new);
+		EntityHelper.createSpecialTileEntity(LitterboxEntity.class, "Litterbox", LitterboxRenderer::new);
 	}
 }

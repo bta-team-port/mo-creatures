@@ -8,16 +8,16 @@ import net.minecraft.core.block.Block;
 import org.lwjgl.opengl.GL11;
 import org.useless.dragonfly.helper.ModelHelper;
 import teamport.creatures.MoCreatures;
-import teamport.creatures.core.block.entity.LitterboxTile;
+import teamport.creatures.core.block.LitterboxEntity;
 
 import static teamport.creatures.MoCreatures.MOD_ID;
 
-public class LitterboxRenderer extends TileEntityRenderer<LitterboxTile> {
+public class LitterboxRenderer extends TileEntityRenderer<LitterboxEntity> {
 	private final ModelBase model = ModelHelper.getOrCreateEntityModel(MOD_ID, "entity/litterbox.json", LitterboxModel.class);
 	private final Minecraft mc = Minecraft.getMinecraft(Minecraft.class);
 
 	@Override
-	public void doRender(Tessellator tessellator, LitterboxTile tileEntity, double x, double y, double z, float partialTick) {
+	public void doRender(Tessellator tessellator, LitterboxEntity tileEntity, double x, double y, double z, float partialTick) {
 		GL11.glPushMatrix();
 		GL11.glDisable(2884);
 		GL11.glTranslated(x + 0.5, y, z + 0.5);

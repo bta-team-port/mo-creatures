@@ -14,7 +14,7 @@ import net.minecraft.core.util.helper.MathHelper;
 import net.minecraft.core.util.phys.AABB;
 import net.minecraft.core.world.IVehicle;
 import net.minecraft.core.world.World;
-import teamport.creatures.core.block.entity.LitterboxTile;
+import teamport.creatures.core.block.LitterboxEntity;
 
 import java.util.List;
 import java.util.Objects;
@@ -227,8 +227,8 @@ public class KittyEntity extends EntityAnimal {
 
 				if (!tileEntities.isEmpty()) {
 					for (TileEntity tileEntity : tileEntities) {
-						if (tileEntity instanceof LitterboxTile) {
-							if (!((LitterboxTile) tileEntity).isFilthy && potty <= 0) {
+						if (tileEntity instanceof LitterboxEntity) {
+							if (!((LitterboxEntity) tileEntity).isFilthy && potty <= 0) {
 								pathToEntity = world.getEntityPathToXYZ(this, tileEntity.x, tileEntity.y, tileEntity.z, 16.0F);
 								if (distanceToSqr(tileEntity.x, tileEntity.y, tileEntity.z) < 4.0 && !isPassenger()) {
 									setPos(tileEntity.x, tileEntity.y, tileEntity.z);
@@ -237,8 +237,8 @@ public class KittyEntity extends EntityAnimal {
 							}
 
 							if (isPassenger() && usingPottyTime-- <= -200) {
-								((LitterboxTile) tileEntity).ejectRider();
-								((LitterboxTile) tileEntity).isFilthy = true;
+								((LitterboxEntity) tileEntity).ejectRider();
+								((LitterboxEntity) tileEntity).isFilthy = true;
 								usingPottyTime = 0;
 								potty = random.nextInt(6000) + 6000;
 							}
