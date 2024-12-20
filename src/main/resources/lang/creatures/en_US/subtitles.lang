@@ -1,0 +1,18 @@
+# Foxes (dun dun dun dun)
+creatures.subtitles.mob.fox=Fox bark
+creatures.subtitles.mob.fox.angry=Fox growl
+creatures.subtitles.mob.fox.death=Fox death
+creatures.subtitles.mob.fox.hurt=Fox hurt
+
+# Bears
+creatures.subtitles.mob.bear=Bear grunt
+creatures.subtitles.mob.bear.death=Bear death
+creatures.subtitles.mob.bear.hurt=Bear hurt
+
+# Birds
+creatures.subtitles.mob.bird.black=Crow hawk
+creatures.subtitles.mob.bird.blue=Blue Jay chirp
+creatures.subtitles.mob.bird.green=Parakeet chirp
+creatures.subtitles.mob.bird.red=Cardinal chirp
+creatures.subtitles.mob.bird.white=Pigeon coo
+creatures.subtitles.mob.bird.yellow=Warbler chirp

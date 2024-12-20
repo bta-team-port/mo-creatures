@@ -1,0 +1,104 @@
+{
+  "mob.fox": {
+    "subtitle": "creatures.subtitles.mob.fox",
+    "sounds": [
+      "mob/fox/fox1.wav",
+      "mob/fox/fox2.wav",
+      "mob/fox/fox3.wav"
+    ]
+  },
+  "mob.fox.angry": {
+    "subtitle": "creatures.subtitles.mob.fox.angry",
+    "sounds": [
+      "mob/fox/angry1.wav",
+      "mob/fox/angry2.wav",
+      "mob/fox/angry3.wav"
+    ]
+  },
+  "mob.fox.death": {
+    "subtitle": "creatures.subtitles.mob.fox.death",
+    "sounds": [
+      "mob/fox/death.wav"
+    ]
+  },
+  "mob.fox.hurt": {
+    "subtitle": "creatures.subtitles.mob.fox.hurt",
+    "sounds": [
+      "mob/fox/hurt.wav"
+    ]
+  },
+  "mob.bear": {
+    "subtitle": "creatures.subtitles.mob.bear",
+    "sounds": [
+      "mob/bear/grunt1.ogg",
+      "mob/bear/grunt2.ogg",
+      "mob/bear/grunt3.ogg",
+      "mob/bear/grunt4.ogg",
+      "mob/bear/grunt5.ogg"
+    ]
+  },
+  "mob.bear.death": {
+    "subtitle": "creatures.subtitles.mob.bear.death",
+    "sounds": [
+      "mob/bear/death.ogg"
+    ]
+  },
+  "mob.bear.hurt": {
+    "subtitle": "creatures.subtitles.mob.bear.hurt",
+    "sounds": [
+      "mob/bear/hurt1.ogg",
+      "mob/bear/hurt2.ogg"
+    ]
+  },
+  "mob.bird.black": {
+    "subtitle": "creatures.subtitles.mob.bird.black",
+    "sounds": [
+      "mob/bird/birdblack1.ogg",
+      "mob/bird/birdblack2.ogg",
+      "mob/bird/birdblack3.ogg"
+    ]
+  },
+  "mob.bird.blue": {
+    "subtitle": "creatures.subtitles.mob.bird.blue",
+    "sounds": [
+      "mob/bird/birdblue1.ogg",
+      "mob/bird/birdblue2.ogg",
+      "mob/bird/birdblue3.ogg",
+      "mob/bird/birdblue4.ogg"
+    ]
+  },
+  "mob.bird.green": {
+    "subtitle": "creatures.subtitles.mob.bird.green",
+    "sounds": [
+      "mob/bird/birdgreen1.ogg",
+      "mob/bird/birdgreen2.ogg",
+      "mob/bird/birdgreen3.ogg"
+    ]
+  },
+  "mob.bird.red": {
+    "subtitle": "creatures.subtitles.mob.bird.red",
+    "sounds": [
+      "mob/bird/birdred1.ogg",
+      "mob/bird/birdred2.ogg",
+      "mob/bird/birdred3.ogg",
+      "mob/bird/birdred4.ogg",
+      "mob/bird/birdred5.ogg"
+    ]
+  },
+  "mob.bird.white": {
+    "subtitle": "creatures.subtitles.mob.bird.white",
+    "sounds": [
+      "mob/bird/birdwhite1.ogg"
+    ]
+  },
+  "mob.bird.yellow": {
+    "subtitle": "creatures.subtitles.mob.bird.yellow",
+    "sounds": [
+      "mob/bird/birdyellow1.ogg",
+      "mob/bird/birdyellow2.ogg",
+      "mob/bird/birdyellow3.ogg",
+      "mob/bird/birdyellow4.ogg",
+      "mob/bird/birdyellow5.ogg"
+    ]
+  }
+}

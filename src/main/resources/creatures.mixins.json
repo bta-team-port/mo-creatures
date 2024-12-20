@@ -4,10 +4,10 @@
   "package": "teamport.creatures.extra.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BiomeMixin",
-    "EntityPlayerMixin"
+    "BiomeMixin"
   ],
   "client": [
+    "client.SoundRepositoryMixin"
   ],
   "injectors": {
     "defaultRequire": 1

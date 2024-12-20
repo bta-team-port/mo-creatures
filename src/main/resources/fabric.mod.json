@@ -20,22 +20,22 @@
   "environment": "*",
   "entrypoints": {
 		"main": [
-			"teamport.creatures.MoCreatures"
+			"teamport.creatures.MoreMobs"
 		],
 		"beforeGameStart": [
-			"teamport.creatures.MoCreatures"
+			"teamport.creatures.MoreMobs"
 		],
 		"afterGameStart": [
-			"teamport.creatures.MoCreatures"
+			"teamport.creatures.MoreMobs"
 		],
 		"beforeClientStart": [
-			"teamport.creatures.MoCreatures"
+			"teamport.creatures.MoreMobsClient"
 		],
 		"afterClientStart": [
-			"teamport.creatures.MoCreatures"
+			"teamport.creatures.MoreMobsClient"
 		],
 		"recipesReady": [
-			"teamport.creatures.core.MCRecipes"
+			"teamport.creatures.core.MMRecipes"
 		]
 	},
   "mixins": [
