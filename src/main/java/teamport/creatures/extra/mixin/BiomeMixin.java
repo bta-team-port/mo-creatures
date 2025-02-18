@@ -9,6 +9,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import teamport.creatures.MMConfig;
+import teamport.creatures.core.entity.mob.MobBear;
+import teamport.creatures.core.entity.mob.MobBird;
 import teamport.creatures.core.entity.mob.MobFox;
 
 import java.util.List;
@@ -25,6 +27,8 @@ public abstract class BiomeMixin {
 
 	@Inject(method = "<init>", at = @At("TAIL"))
 	private void creatures_addMobs(CallbackInfo ci) {
+		spawnableCreatureList.add(new SpawnListEntry(MobBear.class, creatures_getFreq("bear")));
+		spawnableCreatureList.add(new SpawnListEntry(MobBird.class, creatures_getFreq("bird")));
 		spawnableCreatureList.add(new SpawnListEntry(MobFox.class, creatures_getFreq("fox")));
 	}
 }

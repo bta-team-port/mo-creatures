@@ -100,5 +100,30 @@
       "mob/bird/birdyellow4.ogg",
       "mob/bird/birdyellow5.ogg"
     ]
+  },
+  "mob.bunny.death": {
+    "subtitle": "creatures.subtitles.mob.bunny.death",
+    "sounds": [
+      "mob/bunny/death.ogg"
+    ]
+  },
+  "mob.bunny.hurt": {
+    "subtitle": "creatures.subtitles.mob.bunny.hurt",
+    "sounds": [
+      "mob/bunny/hurt1.ogg",
+      "mob/bunny/hurt2.ogg"
+    ]
+  },
+  "mob.bunny.land": {
+    "subtitle": "creatures.subtitles.mob.bunny.land",
+    "sounds": [
+      "mob/bunny/land.ogg"
+    ]
+  },
+  "mob.bunny.lift": {
+    "subtitle": "creatures.subtitles.mob.bunny.lift",
+    "sounds": [
+      "mob/bunny/lift.ogg"
+    ]
   }
 }

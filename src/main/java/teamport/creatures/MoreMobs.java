@@ -5,7 +5,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import teamport.creatures.core.block.MMBlocks;
 import teamport.creatures.core.entity.MMEntities;
-import teamport.creatures.core.item.MMItemTags;
 import teamport.creatures.core.item.MMItems;
 import turniplabs.halplibe.util.GameStartEntrypoint;
 
