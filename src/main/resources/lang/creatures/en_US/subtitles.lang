@@ -16,3 +16,9 @@ creatures.subtitles.mob.bird.green=Parakeet chirp
 creatures.subtitles.mob.bird.red=Cardinal chirp
 creatures.subtitles.mob.bird.white=Pigeon coo
 creatures.subtitles.mob.bird.yellow=Warbler chirp
+
+# Bunnies
+creatures.subtitles.mob.bunny.land=Bunny land
+creatures.subtitles.mob.bunny.lift=Bunny jump
+creatures.subtitles.mob.bunny.death=Bunny death
+creatures.subtitles.mob.bunny.hurt=Bunny hurt

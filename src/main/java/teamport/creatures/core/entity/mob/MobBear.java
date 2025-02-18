@@ -13,6 +13,7 @@ import net.minecraft.core.util.helper.MathHelper;
 import net.minecraft.core.world.World;
 import net.minecraft.core.world.biome.Biome;
 import net.minecraft.core.world.biome.Biomes;
+import net.minecraft.core.world.season.SeasonWinter;
 import org.jetbrains.annotations.NotNull;
 import teamport.creatures.MoreMobs;
 
@@ -222,6 +223,11 @@ public class MobBear extends MobAnimal {
 		int mhZ = MathHelper.floor(this.z);
 		Biome biome = world.getBlockBiome(mhX, mhY, mhZ);
 
+		if (world.seasonManager.getCurrentSeason() instanceof SeasonWinter &&
+			(biome != Biomes.OVERWORLD_GLACIER || biome != Biomes.OVERWORLD_TUNDRA)) {
+			return false;
+		}
+
 		if (world.checkIfAABBIsClear(bb) && !world.getIsAnyLiquid(bb)) {
 			if (getBlockPathWeight(mhX, mhY, mhZ) > 0 && world.canBlockSeeTheSky(mhX, mhY, mhZ)) {
 				if (world.getFullBlockLightValue(mhX, mhY, mhZ) > 8) {
@@ -230,5 +236,10 @@ public class MobBear extends MobAnimal {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public int getMaxSpawnedInChunk() {
+		return 2;
 	}
 }

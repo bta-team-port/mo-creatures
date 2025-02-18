@@ -1,10 +1,13 @@
 package teamport.creatures.client.render.entity;
 
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.entity.MobRenderer;
 import net.minecraft.client.render.model.ModelBase;
 import net.minecraft.core.util.helper.MathHelper;
 import teamport.creatures.core.entity.mob.MobBird;
 
+@Environment(EnvType.CLIENT)
 public class MobRendererBird extends MobRenderer<MobBird> {
 	public MobRendererBird(ModelBase model, float shadowSize) {
 		super(model, shadowSize);
